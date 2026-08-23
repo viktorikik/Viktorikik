@@ -1130,7 +1130,6 @@
                     const birthdayThisYear = new Date(todayYear, b.month - 1, b.day);
                     
                     // Проверяем, прошел ли уже этот день рождения в этом году
-                    // Если сегодня день рождения - он считается следующим (если еще не прошел)
                     const isPast = birthdayThisYear < today;
                     
                     if (isPast) {
@@ -1167,12 +1166,32 @@
                 return next;
             }
 
-            // ===== ОБНОВЛЕНИЕ ПРЕВЬЮ =====
+            // ===== ОБНОВЛЕНИЕ ПРЕВЬЮ (УЛУЧШЕННЫЙ) =====
             function updatePreview() {
                 const next = getNextBirthday();
                 if (next) {
+                    // Собираем всех именинников на этот день
+                    const allPeopleOnDay = getBirthdayPeople(next.day, next.month, new Date().getFullYear());
+                    
+                    let names = [];
+                    if (allPeopleOnDay.length > 0) {
+                        allPeopleOnDay.forEach(person => {
+                            if (person.type === 'mom') {
+                                names.push(person.name);
+                            } else if (person.type === 'kid') {
+                                names.push(person.baby);
+                            }
+                        });
+                    }
+                    
+                    // Если по какой-то причине массив пуст, используем имя из next
+                    if (names.length === 0 && next.name) {
+                        names.push(next.name);
+                    }
+                    
                     const monthName = monthNamesNom[next.month - 1];
-                    const description = `Следующий день рождения: ${next.day} ${monthName} — ${next.name} 🎉`;
+                    let description = `Следующий день рождения: ${next.day} ${monthName} — ${names.join(' и ')} 🎉`;
+                    
                     const ogDesc = document.getElementById('ogDescription');
                     const twitterDesc = document.getElementById('twitterDescription');
                     if (ogDesc) ogDesc.content = description;
