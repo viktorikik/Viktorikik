@@ -40,6 +40,171 @@
             color: #2d2a24;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.light-theme {
+            background: #f7f0e8 !important;
+            background-image: radial-gradient(ellipse at 30% 20%, #fdf6ef 0%, #f0e4d8 100%) !important;
+            color: #2d2a24 !important;
+        }
+
+        body.light-theme .calendar-app {
+            background: rgba(255, 250, 245, 0.78) !important;
+            border-color: rgba(255, 245, 235, 0.5) !important;
+        }
+
+        body.light-theme .calendar-header h1 {
+            color: #2b2520 !important;
+        }
+
+        body.light-theme .current-month {
+            color: #3d2c1e !important;
+        }
+
+        body.light-theme .day {
+            color: #8a7a6a !important;
+            background: rgba(255, 250, 245, 0.2) !important;
+        }
+
+        body.light-theme .day.birthday {
+            background: linear-gradient(135deg, #f7e0cc, #f5d4ba) !important;
+            color: #5a3f2e !important;
+            border-color: #e8b48c !important;
+        }
+
+        body.light-theme .day.today {
+            border-color: #d4875e !important;
+            background: rgba(255, 250, 245, 0.8) !important;
+            color: #3d2c1e !important;
+        }
+
+        body.light-theme .today-info {
+            color: #5a3f2e !important;
+            background: linear-gradient(135deg, rgba(212, 135, 94, 0.12), rgba(212, 135, 94, 0.05)) !important;
+            border-color: rgba(212, 135, 94, 0.15) !important;
+        }
+
+        body.light-theme .today-info .highlight {
+            color: #d4875e !important;
+        }
+
+        body.light-theme .today-info .empty {
+            color: #b0957e !important;
+        }
+
+        body.light-theme .stats {
+            color: #b0957e !important;
+            background: rgba(255, 250, 245, 0.4) !important;
+            border-color: rgba(255, 245, 235, 0.3) !important;
+        }
+
+        body.light-theme .stats strong {
+            color: #d4875e !important;
+        }
+
+        body.light-theme .summary {
+            color: #b0957e !important;
+            background: rgba(255, 250, 245, 0.4) !important;
+            border-color: rgba(255, 245, 235, 0.3) !important;
+        }
+
+        body.light-theme .summary strong {
+            color: #d4875e !important;
+        }
+
+        body.light-theme .summary .word {
+            color: #d4875e !important;
+        }
+
+        body.light-theme .weekdays {
+            color: #b0957e !important;
+        }
+
+        body.light-theme .filter-btn {
+            background: rgba(255, 250, 245, 0.3) !important;
+            color: #b0957e !important;
+            border-color: rgba(200, 160, 130, 0.2) !important;
+        }
+
+        body.light-theme .filter-btn.active {
+            color: #5a3f2e !important;
+        }
+
+        body.light-theme .filter-btn[data-filter="all"].active {
+            background: linear-gradient(135deg, #e8dcc8, #ddd0bc) !important;
+            border-color: #b8a898 !important;
+            color: #3d2c1e !important;
+        }
+
+        body.light-theme .filter-btn[data-filter="moms"].active {
+            background: linear-gradient(135deg, #f7d4cc, #f5c4ba) !important;
+            border-color: #d4876e !important;
+            color: #5a3f2e !important;
+        }
+
+        body.light-theme .filter-btn[data-filter="kids"].active {
+            background: linear-gradient(135deg, #ccf0e0, #bae8d4) !important;
+            border-color: #6eb894 !important;
+            color: #1e4a3a !important;
+        }
+
+        body.light-theme .nav-btn {
+            color: #b8957a !important;
+            background: rgba(255, 250, 245, 0.5) !important;
+            border-color: rgba(200, 160, 130, 0.2) !important;
+        }
+
+        body.light-theme .year-nav select {
+            color: #3d2c1e !important;
+            background: rgba(255, 250, 245, 0.5) !important;
+            border-color: rgba(200, 160, 130, 0.2) !important;
+        }
+
+        body.light-theme .modal-card {
+            background: rgba(255, 250, 245, 0.96) !important;
+            border-color: rgba(255, 245, 235, 0.6) !important;
+        }
+
+        body.light-theme .modal-date {
+            color: #3d2c1e !important;
+        }
+
+        body.light-theme .greeting {
+            color: #3d2c1e !important;
+        }
+
+        body.light-theme .greeting .name {
+            color: #d4875e !important;
+        }
+
+        body.light-theme .mom-info {
+            color: #b0957e !important;
+        }
+
+        body.light-theme .mom-info strong {
+            color: #3d2c1e !important;
+        }
+
+        body.light-theme .age-info {
+            color: #d4875e !important;
+        }
+
+        body.light-theme .birthday-entry {
+            background: rgba(247, 224, 204, 0.25) !important;
+            border-color: rgba(200, 160, 130, 0.08) !important;
+        }
+
+        body.light-theme .divider {
+            color: #dcc8b8 !important;
+        }
+
+        body.light-theme .modal-close {
+            color: #b0957e !important;
+        }
+
+        body.light-theme .today-btn {
+            background: linear-gradient(135deg, #d4875e, #c47a54) !important;
         }
 
         .calendar-app {
@@ -52,7 +217,7 @@
             padding: 24px 18px 22px;
             border: 1px solid rgba(255, 245, 235, 0.5);
             box-shadow: 0 24px 64px rgba(180, 120, 80, 0.08), 0 4px 16px rgba(180, 120, 80, 0.04);
-            transition: padding 0.2s ease;
+            transition: padding 0.2s ease, background 0.3s ease, border-color 0.3s ease;
             margin-top: 10px;
         }
 
@@ -69,6 +234,7 @@
             letter-spacing: -0.3px;
             margin-bottom: 6px;
             line-height: 1.3;
+            transition: color 0.3s ease;
         }
 
         .calendar-header h1 span {
@@ -182,6 +348,7 @@
             font-weight: 400;
             min-width: 80px;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
         .year-nav select:focus {
@@ -259,6 +426,7 @@
             text-align: center;
             letter-spacing: -0.2px;
             white-space: nowrap;
+            transition: color 0.3s ease;
         }
 
         .weekdays {
@@ -271,6 +439,7 @@
             margin-bottom: 8px;
             letter-spacing: 1px;
             text-transform: uppercase;
+            transition: color 0.3s ease;
         }
 
         .calendar-grid {
@@ -289,7 +458,7 @@
             font-weight: 400;
             color: #8a7a6a;
             background: rgba(255, 250, 245, 0.2);
-            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
             border: 1px solid transparent;
             cursor: default;
             position: relative;
@@ -320,7 +489,7 @@
             border-color: #e8b48c;
             box-shadow: 0 2px 12px rgba(212, 135, 94, 0.12);
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         .day.birthday:active {
@@ -361,9 +530,10 @@
             background: rgba(255, 250, 245, 0.8);
             color: #3d2c1e;
             font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        /* ===== АНИМАЦИЯ ПОДСВЕТКИ СЕГОДНЯШНЕГО ДНЯ (БОЛЕЕ ДЕЛИКАТНАЯ) ===== */
+        /* ===== АНИМАЦИЯ ПОДСВЕТКИ СЕГОДНЯШНЕГО ДНЯ ===== */
         .day.today-highlight {
             animation: todayHighlight 2s ease-in-out 1;
             border-color: #ffd700 !important;
@@ -482,6 +652,65 @@
         .summary .word {
             color: #d4875e;
             font-weight: 400;
+        }
+
+        /* ===== УВЕДОМЛЕНИЕ О ТЕМНОЙ ТЕМЕ ===== */
+        .theme-notification {
+            margin-top: 10px;
+            background: rgba(255, 215, 0, 0.08);
+            border-radius: 60px;
+            padding: clamp(10px, 2.5vw, 14px) clamp(14px, 3vw, 20px);
+            text-align: center;
+            font-size: clamp(11px, 2.8vw, 13px);
+            font-weight: 300;
+            color: #b0957e;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            letter-spacing: 0.2px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+
+        .theme-notification .theme-message {
+            color: #8a7a6a;
+        }
+
+        .theme-notification .theme-message strong {
+            color: #d4875e;
+            font-weight: 500;
+        }
+
+        .theme-notification .theme-btn {
+            background: linear-gradient(135deg, #ffd700, #f0c800);
+            border: none;
+            border-radius: 40px;
+            padding: 4px 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(11px, 2.5vw, 13px);
+            color: #3d2c1e;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            touch-action: manipulation;
+            white-space: nowrap;
+            box-shadow: 0 2px 12px rgba(255, 215, 0, 0.2);
+        }
+
+        .theme-notification .theme-btn:active {
+            transform: scale(0.92);
+        }
+
+        @media (hover: hover) {
+            .theme-notification .theme-btn:hover {
+                background: linear-gradient(135deg, #f0c800, #e0b800);
+                box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+                transform: translateY(-1px);
+            }
         }
 
         .modal-overlay {
@@ -754,6 +983,14 @@
                 font-size: 12px;
                 padding: 8px 12px;
             }
+            .theme-notification {
+                font-size: 10px;
+                padding: 8px 12px;
+            }
+            .theme-notification .theme-btn {
+                font-size: 10px;
+                padding: 3px 12px;
+            }
         }
 
         @media (min-width: 768px) {
@@ -780,181 +1017,202 @@
             }
         }
 
+        /* ===== DARK MODE (ОСТАВЛЯЕМ ТОЛЬКО ДЛЯ СИСТЕМНОЙ ТЕМЫ) ===== */
         @media (prefers-color-scheme: dark) {
-            body {
+            body:not(.light-theme) {
                 background: #1a1410;
                 background-image: radial-gradient(ellipse at 30% 20%, #2a1e16 0%, #1a1410 100%);
             }
-            .calendar-app {
+            body:not(.light-theme) .calendar-app {
                 background: rgba(30, 22, 18, 0.85);
                 border-color: rgba(255, 245, 235, 0.06);
             }
-            .calendar-header h1 {
+            body:not(.light-theme) .calendar-header h1 {
                 color: #f0e4d8;
             }
-            .calendar-header h1 span {
+            body:not(.light-theme) .calendar-header h1 span {
                 -webkit-text-fill-color: #f0e4d8;
                 color: #f0e4d8;
             }
-            .current-month {
+            body:not(.light-theme) .current-month {
                 color: #f0e4d8;
             }
-            .weekdays {
+            body:not(.light-theme) .weekdays {
                 color: #8a7a6a;
             }
-            .day {
+            body:not(.light-theme) .day {
                 color: #8a7a6a;
                 background: rgba(255, 250, 245, 0.05);
             }
-            .day.birthday {
+            body:not(.light-theme) .day.birthday {
                 background: linear-gradient(135deg, #5a3f2e, #7a5a42);
                 color: #f5ede8;
                 border-color: #d4875e;
                 box-shadow: 0 2px 12px rgba(212, 135, 94, 0.1);
             }
-            .day.birthday:active {
+            body:not(.light-theme) .day.birthday:active {
                 background: linear-gradient(135deg, #6a4f3e, #8a6a52);
             }
             @media (hover: hover) {
-                .day.birthday:hover {
+                body:not(.light-theme) .day.birthday:hover {
                     background: linear-gradient(135deg, #6a4f3e, #8a6a52);
                 }
-                .day:not(.empty):not(.birthday):hover {
+                body:not(.light-theme) .day:not(.empty):not(.birthday):hover {
                     background: rgba(255, 250, 245, 0.08);
                 }
             }
-            .day.today {
+            body:not(.light-theme) .day.today {
                 border-color: #e8a87c;
                 background: rgba(255, 250, 245, 0.08);
                 color: #f5ede8;
             }
-            .day.today-highlight {
+            body:not(.light-theme) .day.today-highlight {
                 border-color: #ffd700 !important;
                 background: rgba(255, 215, 0, 0.12) !important;
                 color: #f0e4d8 !important;
                 box-shadow: 0 0 20px rgba(255, 215, 0, 0.15) !important;
             }
-            .today-btn {
+            body:not(.light-theme) .today-btn {
                 background: linear-gradient(135deg, #e8a87c, #d4875e);
             }
-            .today-btn:active {
+            body:not(.light-theme) .today-btn:active {
                 background: linear-gradient(135deg, #d4875e, #c47a54);
             }
             @media (hover: hover) {
-                .today-btn:hover {
+                body:not(.light-theme) .today-btn:hover {
                     background: linear-gradient(135deg, #d4875e, #c47a54);
                 }
             }
-            .today-info {
+            body:not(.light-theme) .today-info {
                 background: rgba(212, 135, 94, 0.08);
                 border-color: rgba(212, 135, 94, 0.1);
                 color: #f0e4d8;
             }
-            .today-info .highlight {
+            body:not(.light-theme) .today-info .highlight {
                 color: #e8a87c;
             }
-            .today-info .empty {
+            body:not(.light-theme) .today-info .empty {
                 color: #8a7a6a;
             }
-            .stats {
+            body:not(.light-theme) .theme-notification {
+                background: rgba(255, 215, 0, 0.06);
+                border-color: rgba(255, 215, 0, 0.1);
+                color: #8a7a6a;
+            }
+            body:not(.light-theme) .theme-notification .theme-message {
+                color: #8a7a6a;
+            }
+            body:not(.light-theme) .theme-notification .theme-message strong {
+                color: #e8a87c;
+            }
+            body:not(.light-theme) .theme-notification .theme-btn {
+                background: linear-gradient(135deg, #e8a87c, #d4875e);
+                color: #f5ede8;
+            }
+            @media (hover: hover) {
+                body:not(.light-theme) .theme-notification .theme-btn:hover {
+                    background: linear-gradient(135deg, #d4875e, #c47a54);
+                }
+            }
+            body:not(.light-theme) .stats {
                 color: #8a7a6a;
                 border-color: rgba(255, 245, 235, 0.06);
                 background: rgba(255, 250, 245, 0.05);
             }
-            .stats strong {
+            body:not(.light-theme) .stats strong {
                 color: #e8a87c;
             }
-            .stats .highlight {
+            body:not(.light-theme) .stats .highlight {
                 color: #e8a87c;
             }
-            .summary {
+            body:not(.light-theme) .summary {
                 color: #8a7a6a;
                 border-color: rgba(255, 245, 235, 0.06);
                 background: rgba(255, 250, 245, 0.05);
             }
-            .summary strong {
+            body:not(.light-theme) .summary strong {
                 color: #e8a87c;
             }
-            .summary .word {
+            body:not(.light-theme) .summary .word {
                 color: #e8a87c;
             }
-            .modal-overlay {
+            body:not(.light-theme) .modal-overlay {
                 background: rgba(0, 0, 0, 0.5);
             }
-            .modal-card {
+            body:not(.light-theme) .modal-card {
                 background: rgba(30, 22, 18, 0.95);
                 border-color: rgba(255, 245, 235, 0.06);
             }
-            .modal-date {
+            body:not(.light-theme) .modal-date {
                 color: #f0e4d8;
             }
-            .modal-date .month-name {
+            body:not(.light-theme) .modal-date .month-name {
                 color: #e8a87c;
             }
-            .greeting {
+            body:not(.light-theme) .greeting {
                 color: #f0e4d8;
             }
-            .greeting .name {
+            body:not(.light-theme) .greeting .name {
                 color: #e8a87c;
             }
-            .mom-info {
+            body:not(.light-theme) .mom-info {
                 color: #8a7a6a;
             }
-            .mom-info strong {
+            body:not(.light-theme) .mom-info strong {
                 color: #f0e4d8;
             }
-            .age-info {
+            body:not(.light-theme) .age-info {
                 color: #e8a87c;
             }
-            .birthday-entry {
+            body:not(.light-theme) .birthday-entry {
                 background: rgba(247, 224, 204, 0.06);
                 border-color: rgba(200, 160, 130, 0.06);
             }
-            .divider {
+            body:not(.light-theme) .divider {
                 color: #5a4a3a;
             }
-            .modal-close {
+            body:not(.light-theme) .modal-close {
                 color: #8a7a6a;
             }
-            .modal-close:active {
+            body:not(.light-theme) .modal-close:active {
                 color: #f0e4d8;
                 background: rgba(255, 250, 245, 0.06);
             }
-            .filter-btn {
+            body:not(.light-theme) .filter-btn {
                 background: rgba(255, 250, 245, 0.05);
                 border-color: rgba(200, 160, 130, 0.1);
                 color: #8a7a6a;
             }
-            .filter-btn.active {
+            body:not(.light-theme) .filter-btn.active {
                 color: #f5ede8;
             }
-            .filter-btn[data-filter="all"].active {
+            body:not(.light-theme) .filter-btn[data-filter="all"].active {
                 background: linear-gradient(135deg, #4a3a2e, #3d2c1e);
                 border-color: #8a7a6a;
                 color: #f5ede8;
             }
-            .filter-btn[data-filter="moms"].active {
+            body:not(.light-theme) .filter-btn[data-filter="moms"].active {
                 background: linear-gradient(135deg, #6a3f2e, #8a4a3a);
                 border-color: #d4876e;
                 color: #f5ede8;
             }
-            .filter-btn[data-filter="kids"].active {
+            body:not(.light-theme) .filter-btn[data-filter="kids"].active {
                 background: linear-gradient(135deg, #2a5a4a, #3a7a5a);
                 border-color: #6eb894;
                 color: #f5ede8;
             }
-            .year-nav select {
+            body:not(.light-theme) .year-nav select {
                 background-color: rgba(255, 250, 245, 0.05);
                 color: #f0e4d8;
                 border-color: rgba(200, 160, 130, 0.1);
                 background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7a6a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
             }
-            .year-nav select option {
+            body:not(.light-theme) .year-nav select option {
                 background: #1a1410;
                 color: #f0e4d8;
             }
             @media (hover: hover) {
-                .modal-close:hover {
+                body:not(.light-theme) .modal-close:hover {
                     color: #f0e4d8;
                     background: rgba(255, 250, 245, 0.06);
                 }
@@ -1008,6 +1266,11 @@
         </div>
 
         <div class="stats" id="stats"></div>
+
+        <div class="theme-notification" id="themeNotification" style="display: none;">
+            <span class="theme-message">🌙 Включена темная тема в соответствии с настройками твоего телефона!</span>
+            <button class="theme-btn" id="lightThemeBtn">☀️ Вернуть светлую тему</button>
+        </div>
     </div>
 
     <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
@@ -1129,8 +1392,64 @@
             const statsEl = document.getElementById('stats');
             const todayBtn = document.getElementById('todayBtn');
             const todayInfoEl = document.getElementById('todayInfo');
+            const themeNotification = document.getElementById('themeNotification');
+            const lightThemeBtn = document.getElementById('lightThemeBtn');
 
             let currentFilter = 'all';
+            let isDarkTheme = false;
+
+            // ===== ПРОВЕРКА ТЕМНОЙ ТЕМЫ =====
+            function checkDarkTheme() {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const savedTheme = localStorage.getItem('calendarTheme');
+                
+                if (savedTheme === 'light') {
+                    document.body.classList.add('light-theme');
+                    themeNotification.style.display = 'none';
+                    isDarkTheme = false;
+                    return;
+                }
+                
+                if (prefersDark) {
+                    document.body.classList.remove('light-theme');
+                    themeNotification.style.display = 'flex';
+                    isDarkTheme = true;
+                } else {
+                    document.body.classList.add('light-theme');
+                    themeNotification.style.display = 'none';
+                    isDarkTheme = false;
+                }
+            }
+
+            // ===== ПЕРЕКЛЮЧЕНИЕ НА СВЕТЛУЮ ТЕМУ =====
+            function switchToLightTheme() {
+                document.body.classList.add('light-theme');
+                themeNotification.style.display = 'none';
+                isDarkTheme = false;
+                localStorage.setItem('calendarTheme', 'light');
+            }
+
+            // ===== СЛУШАЕМ ИЗМЕНЕНИЕ СИСТЕМНОЙ ТЕМЫ =====
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            darkModeMediaQuery.addEventListener('change', (e) => {
+                const savedTheme = localStorage.getItem('calendarTheme');
+                if (savedTheme === 'light') {
+                    document.body.classList.add('light-theme');
+                    themeNotification.style.display = 'none';
+                    isDarkTheme = false;
+                    return;
+                }
+                
+                if (e.matches) {
+                    document.body.classList.remove('light-theme');
+                    themeNotification.style.display = 'flex';
+                    isDarkTheme = true;
+                } else {
+                    document.body.classList.add('light-theme');
+                    themeNotification.style.display = 'none';
+                    isDarkTheme = false;
+                }
+            });
 
             // ===== ЗАПОЛНЯЕМ ВЫБОР ГОДА =====
             function populateYearSelect() {
@@ -1384,7 +1703,7 @@
                 `;
             }
 
-            // ===== АНИМИРОВАННАЯ ПОДСВЕТКА СЕГОДНЯШНЕГО ДНЯ (2 СЕКУНДЫ) =====
+            // ===== АНИМИРОВАННАЯ ПОДСВЕТКА СЕГОДНЯШНЕГО ДНЯ =====
             function highlightToday() {
                 const today = new Date();
                 const todayDate = today.getDate();
@@ -1400,7 +1719,6 @@
                             void day.offsetWidth;
                             day.classList.add('today-highlight');
                             
-                            // Убираем класс через 2 секунды
                             setTimeout(() => {
                                 day.classList.remove('today-highlight');
                             }, 2000);
@@ -1556,6 +1874,8 @@
                 }, 300);
             });
 
+            lightThemeBtn.addEventListener('click', switchToLightTheme);
+
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     filterBtns.forEach(b => b.classList.remove('active'));
@@ -1600,6 +1920,7 @@
             }, { passive: true });
 
             // ===== ЗАПУСК =====
+            checkDarkTheme();
             render();
         })();
     </script>
