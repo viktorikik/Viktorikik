@@ -363,32 +363,32 @@
             font-weight: 500;
         }
 
-        /* ===== АНИМАЦИЯ ПОДСВЕТКИ СЕГОДНЯШНЕГО ДНЯ ===== */
+        /* ===== АНИМАЦИЯ ПОДСВЕТКИ СЕГОДНЯШНЕГО ДНЯ (БОЛЕЕ ДЕЛИКАТНАЯ) ===== */
         .day.today-highlight {
-            animation: todayHighlight 1.5s ease-in-out 3;
+            animation: todayHighlight 2s ease-in-out 1;
             border-color: #ffd700 !important;
-            border-width: 3px !important;
-            background: rgba(255, 215, 0, 0.3) !important;
+            border-width: 2px !important;
+            background: rgba(255, 215, 0, 0.15) !important;
             color: #2d2a24 !important;
-            font-weight: 600 !important;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4) !important;
+            font-weight: 500 !important;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2) !important;
             z-index: 10;
-            transform: scale(1.05);
         }
 
         @keyframes todayHighlight {
             0% { 
-                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.15);
                 transform: scale(1);
             }
-            50% { 
-                box-shadow: 0 0 40px 20px rgba(255, 215, 0, 0.3);
-                transform: scale(1.12);
-                background: rgba(255, 215, 0, 0.5) !important;
+            30% { 
+                box-shadow: 0 0 25px 10px rgba(255, 215, 0, 0.2);
+                transform: scale(1.06);
+                background: rgba(255, 215, 0, 0.25) !important;
             }
             100% { 
-                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.15);
                 transform: scale(1);
+                background: rgba(255, 215, 0, 0.15) !important;
             }
         }
 
@@ -830,9 +830,9 @@
             }
             .day.today-highlight {
                 border-color: #ffd700 !important;
-                background: rgba(255, 215, 0, 0.2) !important;
+                background: rgba(255, 215, 0, 0.12) !important;
                 color: #f0e4d8 !important;
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.2) !important;
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.15) !important;
             }
             .today-btn {
                 background: linear-gradient(135deg, #e8a87c, #d4875e);
@@ -1384,26 +1384,26 @@
                 `;
             }
 
-            // ===== АНИМИРОВАННАЯ ПОДСВЕТКА СЕГОДНЯШНЕГО ДНЯ =====
+            // ===== АНИМИРОВАННАЯ ПОДСВЕТКА СЕГОДНЯШНЕГО ДНЯ (2 СЕКУНДЫ) =====
             function highlightToday() {
                 const today = new Date();
                 const todayDate = today.getDate();
                 const todayMonth = today.getMonth();
                 const todayYear = today.getFullYear();
                 
-                // Если мы на сегодняшнем месяце и годе
                 if (currentMonth === todayMonth && currentYear === todayYear) {
-                    // Находим все ячейки с классом .day (не пустые)
                     const days = document.querySelectorAll('.day:not(.empty)');
                     days.forEach(day => {
                         const dayNumber = parseInt(day.textContent);
                         if (dayNumber === todayDate) {
-                            // Убираем предыдущую анимацию, если есть
                             day.classList.remove('today-highlight');
-                            // Форсируем перерисовку
                             void day.offsetWidth;
-                            // Добавляем анимацию
                             day.classList.add('today-highlight');
+                            
+                            // Убираем класс через 2 секунды
+                            setTimeout(() => {
+                                day.classList.remove('today-highlight');
+                            }, 2000);
                         }
                     });
                 }
@@ -1480,7 +1480,6 @@
                 updateTodayInfo();
                 updateStats();
                 
-                // Запускаем анимацию подсветки сегодняшнего дня
                 setTimeout(() => {
                     highlightToday();
                 }, 100);
@@ -1552,7 +1551,6 @@
                     this.style.transform = 'scale(1)';
                 }, 200);
                 
-                // Дополнительная анимация подсветки через 300ms после рендера
                 setTimeout(() => {
                     highlightToday();
                 }, 300);
