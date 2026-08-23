@@ -363,6 +363,35 @@
             font-weight: 500;
         }
 
+        /* ===== АНИМАЦИЯ ПОДСВЕТКИ СЕГОДНЯШНЕГО ДНЯ ===== */
+        .day.today-highlight {
+            animation: todayHighlight 1.5s ease-in-out 3;
+            border-color: #ffd700 !important;
+            border-width: 3px !important;
+            background: rgba(255, 215, 0, 0.3) !important;
+            color: #2d2a24 !important;
+            font-weight: 600 !important;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4) !important;
+            z-index: 10;
+            transform: scale(1.05);
+        }
+
+        @keyframes todayHighlight {
+            0% { 
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 40px 20px rgba(255, 215, 0, 0.3);
+                transform: scale(1.12);
+                background: rgba(255, 215, 0, 0.5) !important;
+            }
+            100% { 
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+                transform: scale(1);
+            }
+        }
+
         .today-info {
             margin-top: 10px;
             background: linear-gradient(135deg, rgba(212, 135, 94, 0.12), rgba(212, 135, 94, 0.05));
@@ -799,6 +828,12 @@
                 background: rgba(255, 250, 245, 0.08);
                 color: #f5ede8;
             }
+            .day.today-highlight {
+                border-color: #ffd700 !important;
+                background: rgba(255, 215, 0, 0.2) !important;
+                color: #f0e4d8 !important;
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.2) !important;
+            }
             .today-btn {
                 background: linear-gradient(135deg, #e8a87c, #d4875e);
             }
@@ -951,7 +986,7 @@
                 <select id="yearSelect"></select>
             </div>
             <button class="nav-btn" id="nextMonth" aria-label="Следующий месяц">›</button>
-            <button class="today-btn" id="todayBtn">📅 Сегодня</button>
+            <button class="today-btn" id="todayBtn">Сегодня</button>
         </div>
 
         <div class="weekdays" role="row">
@@ -1237,7 +1272,6 @@
             function calculateYearStats(year) {
                 let allBirthdays = [];
                 
-                // Мамы (всегда есть)
                 Object.keys(momsMap).forEach(key => {
                     const [day, month] = key.split('.').map(Number);
                     allBirthdays.push({
@@ -1248,7 +1282,6 @@
                     });
                 });
                 
-                // Дети (только если родились в этом году или раньше)
                 Object.keys(kidsMap).forEach(key => {
                     const [day, month] = key.split('.').map(Number);
                     kidsMap[key].forEach(kid => {
@@ -1264,7 +1297,6 @@
                     });
                 });
 
-                // Статистика по месяцам
                 const monthStats = {};
                 allBirthdays.forEach(b => {
                     if (!monthStats[b.month]) monthStats[b.month] = 0;
@@ -1296,7 +1328,6 @@
                 
                 const people = getBirthdayPeople(day, month, year);
                 
-                // Фильтруем по текущему фильтру
                 let filtered = people;
                 if (currentFilter === 'moms') {
                     filtered = people.filter(p => p.type === 'mom');
@@ -1351,6 +1382,31 @@
                     📊 В ${currentYear} году <strong>${stats.total}</strong> ${getBirthdayWord(stats.total)} 
                     · Самый популярный месяц — <strong>${monthName}</strong> (${stats.popularMonthCount} ${getBirthdayWord(stats.popularMonthCount)})
                 `;
+            }
+
+            // ===== АНИМИРОВАННАЯ ПОДСВЕТКА СЕГОДНЯШНЕГО ДНЯ =====
+            function highlightToday() {
+                const today = new Date();
+                const todayDate = today.getDate();
+                const todayMonth = today.getMonth();
+                const todayYear = today.getFullYear();
+                
+                // Если мы на сегодняшнем месяце и годе
+                if (currentMonth === todayMonth && currentYear === todayYear) {
+                    // Находим все ячейки с классом .day (не пустые)
+                    const days = document.querySelectorAll('.day:not(.empty)');
+                    days.forEach(day => {
+                        const dayNumber = parseInt(day.textContent);
+                        if (dayNumber === todayDate) {
+                            // Убираем предыдущую анимацию, если есть
+                            day.classList.remove('today-highlight');
+                            // Форсируем перерисовку
+                            void day.offsetWidth;
+                            // Добавляем анимацию
+                            day.classList.add('today-highlight');
+                        }
+                    });
+                }
             }
 
             // ===== РЕНДЕР =====
@@ -1423,6 +1479,11 @@
 
                 updateTodayInfo();
                 updateStats();
+                
+                // Запускаем анимацию подсветки сегодняшнего дня
+                setTimeout(() => {
+                    highlightToday();
+                }, 100);
             }
 
             // ===== МОДАЛКА =====
@@ -1490,6 +1551,11 @@
                 setTimeout(() => {
                     this.style.transform = 'scale(1)';
                 }, 200);
+                
+                // Дополнительная анимация подсветки через 300ms после рендера
+                setTimeout(() => {
+                    highlightToday();
+                }, 300);
             });
 
             filterBtns.forEach(btn => {
