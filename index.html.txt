@@ -1,0 +1,691 @@
+Index.html
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Дни рождения</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f7f0e8;
+            background-image: radial-gradient(ellipse at 30% 20%, #fdf6ef 0%, #f0e4d8 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #2d2a24;
+        }
+
+        .calendar-app {
+            max-width: 620px;
+            width: 100%;
+            background: rgba(255, 250, 245, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 40px;
+            padding: 32px 28px 28px;
+            border: 1px solid rgba(255, 245, 235, 0.5);
+            box-shadow: 0 24px 64px rgba(180, 120, 80, 0.08), 0 4px 16px rgba(180, 120, 80, 0.04);
+        }
+
+        /* Заголовок */
+        .calendar-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .calendar-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            font-size: 32px;
+            color: #3d2c1e;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .calendar-header h1 span {
+            font-weight: 600;
+            background: linear-gradient(135deg, #d4875e, #e8a87c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            font-weight: 300;
+            color: #b0957e;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .subtitle span {
+            margin: 0 4px;
+        }
+
+        /* Навигация по месяцам */
+        .month-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 250, 245, 0.5);
+            border: 1px solid rgba(200, 160, 130, 0.2);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #b8957a;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 250, 245, 0.8);
+            color: #7a5a42;
+            border-color: rgba(200, 160, 130, 0.4);
+            transform: scale(1.04);
+            box-shadow: 0 4px 16px rgba(200, 160, 130, 0.1);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.92);
+        }
+
+        .current-month {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            font-size: 22px;
+            color: #3d2c1e;
+            min-width: 160px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .current-month .year {
+            font-weight: 300;
+            color: #d4875e;
+            font-size: 18px;
+        }
+
+        /* Сетка календаря */
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 11px;
+            font-weight: 500;
+            color: #b0957e;
+            margin-bottom: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+
+        .day {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 400;
+            color: #8a7a6a;
+            background: rgba(255, 250, 245, 0.3);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            cursor: default;
+            position: relative;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .day.empty {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+
+        .day:not(.empty):not(.birthday):hover {
+            background: rgba(255, 250, 245, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* День с именинником — осенние цвета */
+        .day.birthday {
+            background: linear-gradient(135deg, #f7e0cc, #f5d4ba);
+            color: #5a3f2e;
+            font-weight: 500;
+            border-color: #e8b48c;
+            box-shadow: 0 2px 12px rgba(212, 135, 94, 0.15);
+            cursor: pointer;
+        }
+
+        .day.birthday:hover {
+            background: linear-gradient(135deg, #f5d4ba, #f0c8ac);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 24px rgba(212, 135, 94, 0.2);
+        }
+
+        .day.birthday:active {
+            transform: scale(0.92);
+        }
+
+        .day.birthday::after {
+            content: '✦';
+            position: absolute;
+            bottom: 2px;
+            font-size: 10px;
+            color: #d4875e;
+            opacity: 0.7;
+        }
+
+        .day.today {
+            border-color: #d4875e;
+            border-width: 2px;
+            background: rgba(255, 250, 245, 0.8);
+            color: #3d2c1e;
+            font-weight: 500;
+        }
+
+        /* Суммарий — со склонением */
+        .summary {
+            margin-top: 24px;
+            background: rgba(255, 250, 245, 0.4);
+            border-radius: 60px;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 300;
+            color: #b0957e;
+            border: 1px solid rgba(255, 245, 235, 0.3);
+            letter-spacing: 0.3px;
+        }
+
+        .summary strong {
+            color: #d4875e;
+            font-weight: 600;
+        }
+
+        /* Модалка */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(60, 45, 35, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: rgba(255, 250, 245, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 36px 28px 32px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255, 245, 235, 0.6);
+            box-shadow: 0 40px 80px rgba(180, 120, 80, 0.12), 0 8px 24px rgba(180, 120, 80, 0.04);
+            animation: pop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes pop {
+            0% { opacity: 0; transform: scale(0.92) translateY(12px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-close {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #b0957e;
+            cursor: pointer;
+            transition: color 0.2s;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover {
+            color: #3d2c1e;
+            background: rgba(60, 45, 35, 0.04);
+        }
+
+        .modal-date {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            font-size: 24px;
+            color: #3d2c1e;
+            margin: 4px 0 18px;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-date .month-name {
+            color: #d4875e;
+        }
+
+        .birthday-entry {
+            background: rgba(247, 224, 204, 0.25);
+            padding: 18px 16px;
+            border-radius: 28px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(200, 160, 130, 0.08);
+        }
+
+        .birthday-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .greeting {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: #3d2c1e;
+            margin-bottom: 4px;
+        }
+
+        .greeting .name {
+            font-weight: 600;
+            color: #d4875e;
+        }
+
+        .mom-info {
+            font-size: 15px;
+            color: #b0957e;
+            font-weight: 300;
+            margin-top: 2px;
+        }
+
+        .mom-info strong {
+            color: #3d2c1e;
+            font-weight: 500;
+        }
+
+        .age-info {
+            font-size: 15px;
+            color: #d4875e;
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        .divider {
+            color: #dcc8b8;
+            margin: 8px 0;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 480px) {
+            .calendar-app {
+                padding: 20px 16px;
+                border-radius: 28px;
+            }
+            .calendar-header h1 {
+                font-size: 26px;
+            }
+            .current-month {
+                font-size: 18px;
+                min-width: 120px;
+            }
+            .day {
+                font-size: 14px;
+                border-radius: 50%;
+                min-height: 40px;
+            }
+            .modal-card {
+                padding: 28px 20px 24px;
+            }
+            .greeting {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar-app">
+        <div class="calendar-header">
+            <h1>✨ <span>Дни</span> рождения</h1>
+            <div class="subtitle">
+                <span>👩</span> мамы <span>·</span> <span>🎈</span> малыши
+            </div>
+        </div>
+
+        <div class="month-selector">
+            <button class="nav-btn" id="prevMonth">‹</button>
+            <span class="current-month" id="currentMonthLabel">
+                Январь <span class="year">2025</span>
+            </span>
+            <button class="nav-btn" id="nextMonth">›</button>
+        </div>
+
+        <div class="weekdays">
+            <span>Пн</span><span>Вт</span><span>Ср</span>
+            <span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="summary" id="summary">
+            🎂 В этом месяце <strong id="birthdayCount">0</strong> <span id="birthdayWord">именинников</span>
+        </div>
+    </div>
+
+    <!-- Модалка -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <button class="modal-close" id="closeModalBtn">✕</button>
+            <div class="modal-date" id="modalDate">
+                13 <span class="month-name">января</span>
+            </div>
+            <div id="modalNames"></div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            // ---- СКЛОНЕНИЕ СЛОВА "ИМЕННИНИК" ----
+            function getBirthdayWord(count) {
+                const last = count % 10;
+                const lastTwo = count % 100;
+                if (lastTwo >= 11 && lastTwo <= 19) return 'именинников';
+                if (last === 1) return 'именинник';
+                if (last >= 2 && last <= 4) return 'именинника';
+                return 'именинников';
+            }
+
+            // ---- ДНИ РОЖДЕНИЯ МАМ ----
+            const momsData = [
+                { day: 12, month: 1, name: "Кристина", nameGen: "Кристины" },
+                { day: 1, month: 2, name: "Лена (Elena_Fairytale)", nameGen: "Лены (Elena_Fairytale)" },
+                { day: 2, month: 3, name: "Оля (skripkina_dizain)", nameGen: "Оли (skripkina_dizain)" },
+                { day: 31, month: 3, name: "Катя (Keti3103)", nameGen: "Кати (Keti3103)" },
+                { day: 1, month: 4, name: "Даша", nameGen: "Даши" },
+                { day: 27, month: 5, name: "Даша (darya_sh27)", nameGen: "Даши (darya_sh27)" },
+                { day: 9, month: 6, name: "Лена", nameGen: "Лены" },
+                { day: 16, month: 6, name: "Вика (kikvik)", nameGen: "Вики (kikvik)" },
+                { day: 5, month: 7, name: "Алена (Alena_nikii)", nameGen: "Алены (Alena_nikii)" },
+                { day: 24, month: 7, name: "Лена (LenaMil0)", nameGen: "Лены (LenaMil0)" },
+                { day: 15, month: 8, name: "Вика (viktory1586)", nameGen: "Вики (viktory1586)" },
+                { day: 26, month: 8, name: "Наиля", nameGen: "Наили" },
+                { day: 28, month: 8, name: "Катя", nameGen: "Кати" },
+                { day: 14, month: 9, name: "Эльвира (DobriyElf)", nameGen: "Эльвиры (DobriyElf)" },
+                { day: 23, month: 9, name: "Лиля (lilizka1991)", nameGen: "Лили (lilizka1991)" },
+                { day: 27, month: 9, name: "Маша (Ermolenkomari)", nameGen: "Маши (Ermolenkomari)" },
+                { day: 28, month: 10, name: "Настя (anastasiya_lyub)", nameGen: "Насти (anastasiya_lyub)" },
+                { day: 22, month: 12, name: "Катя (katefrantseva)", nameGen: "Кати (katefrantseva)" },
+                { day: 25, month: 12, name: "Света", nameGen: "Светы" }
+            ];
+
+            // ---- ДНИ РОЖДЕНИЯ МАЛЫШЕЙ ----
+            const kidsData = [
+                { date: "13.01.2024", mom: "Лена", momGen: "Лены", baby: "Тимофей", babyGen: "Тимофея", gender: "male" },
+                { date: "16.01.2026", mom: "Настя", momGen: "Насти", baby: "Ярослав", babyGen: "Ярослава", gender: "male" },
+                { date: "19.01.2024", mom: "Алена", momGen: "Алены", baby: "Ваня", babyGen: "Вани", gender: "male" },
+                { date: "20.01.2024", mom: "Лена", momGen: "Лены", baby: "Рома", babyGen: "Ромы", gender: "male" },
+                { date: "26.01.2024", mom: "Лена", momGen: "Лены", baby: "Ксюша", babyGen: "Ксюши", gender: "female" },
+                { date: "26.01.2024", mom: "Оля", momGen: "Оли", baby: "Градимир", babyGen: "Градимира", gender: "male" },
+                { date: "28.01.2024", mom: "Вика", momGen: "Вики", baby: "Саша", babyGen: "Саши", gender: "female" },
+                { date: "29.01.2024", mom: "Светлана", momGen: "Светланы", baby: "Артем", babyGen: "Артема", gender: "male" },
+                { date: "31.01.2024", mom: "Маша", momGen: "Маши", baby: "Миша", babyGen: "Миши", gender: "male" },
+                { date: "12.02.2024", mom: "Таня", momGen: "Тани", baby: "Дима", babyGen: "Димы", gender: "male" },
+                { date: "12.02.2024", mom: "Настя", momGen: "Насти", baby: "Яна", babyGen: "Яны", gender: "female" },
+                { date: "16.02.2024", mom: "Алена", momGen: "Алены", baby: "Марк", babyGen: "Марка", gender: "male" },
+                { date: "22.02.2024", mom: "Алина", momGen: "Алины", baby: "Богдан", babyGen: "Богдана", gender: "male" },
+                { date: "27.02.2024", mom: "Вика", momGen: "Вики", baby: "Костя", babyGen: "Кости", gender: "male" },
+                { date: "10.03.2026", mom: "Оля", momGen: "Оли", baby: "Ярослава", babyGen: "Ярославы", gender: "female" },
+                { date: "11.03.2024", mom: "Эльвира", momGen: "Эльвиры", baby: "Костя", babyGen: "Кости", gender: "male" },
+                { date: "11.03.2024", mom: "Кристина", momGen: "Кристины", baby: "Витя", babyGen: "Вити", gender: "male" },
+                { date: "11.03.2024", mom: "Алина", momGen: "Алины", baby: "Василиса", babyGen: "Василисы", gender: "female" },
+                { date: "17.03.2024", mom: "Лилия", momGen: "Лилии", baby: "Артемий", babyGen: "Артемия", gender: "male" },
+                { date: "21.03.2024", mom: "Даша", momGen: "Даши", baby: "Василиса", babyGen: "Василисы", gender: "female" },
+                { date: "28.03.2024", mom: "Катя", momGen: "Кати", baby: "Дима", babyGen: "Димы", gender: "male" },
+                { date: "12.04.2024", mom: "Наиля", momGen: "Наили", baby: "Андрей", babyGen: "Андрея", gender: "male" },
+                { date: "23.04.2024", mom: "Маша", momGen: "Маши", baby: "Коля", babyGen: "Коли", gender: "male" },
+                { date: "11.05.2024", mom: "Даша", momGen: "Даши", baby: "Лиза Аня", babyGen: "Лизы Ани", gender: "female" },
+                { date: "16.05.2024", mom: "Катя", momGen: "Кати", baby: "Аня", babyGen: "Ани", gender: "female" },
+                { date: "26.06.2024", mom: "Лена", momGen: "Лены", baby: "Назар", babyGen: "Назара", gender: "male" },
+                { date: "14.08.2024", mom: "Катя", momGen: "Кати", baby: "Ева", babyGen: "Евы", gender: "female" },
+                { date: "28.10.2025", mom: "Кристина", momGen: "Кристины", baby: "Кирилл", babyGen: "Кирилла", gender: "male" }
+            ];
+
+            const monthNames = ["Января","Февраля","Марта","Апреля","Мая","Июня","Июля","Августа","Сентября","Октября","Ноября","Декабря"];
+            const monthNamesNom = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+            let currentMonth = new Date().getMonth();
+            let currentYear = new Date().getFullYear();
+
+            const grid = document.getElementById('calendarGrid');
+            const monthLabel = document.getElementById('currentMonthLabel');
+            const countEl = document.getElementById('birthdayCount');
+            const birthdayWordEl = document.getElementById('birthdayWord');
+
+            const kidsMap = {};
+            kidsData.forEach(item => {
+                const [day, month, year] = item.date.split('.').map(Number);
+                const key = `${String(day).padStart(2,'0')}.${String(month).padStart(2,'0')}`;
+                if (!kidsMap[key]) kidsMap[key] = [];
+                kidsMap[key].push({ ...item, birthYear: year, day, month });
+            });
+
+            const momsMap = {};
+            momsData.forEach(item => {
+                const key = `${String(item.day).padStart(2,'0')}.${String(item.month).padStart(2,'0')}`;
+                if (!momsMap[key]) momsMap[key] = [];
+                momsMap[key].push({ name: item.name, nameGen: item.nameGen });
+            });
+
+            function getAge(birthYear, birthMonth, birthDay, targetYear, targetMonth, targetDay) {
+                let age = targetYear - birthYear;
+                if (targetMonth < birthMonth || (targetMonth === birthMonth && targetDay < birthDay)) age--;
+                return age;
+            }
+
+            function getAgeWord(age) {
+                const last = age % 10;
+                const lastTwo = age % 100;
+                if (lastTwo >= 11 && lastTwo <= 19) return 'лет';
+                if (last === 1) return 'год';
+                if (last >= 2 && last <= 4) return 'года';
+                return 'лет';
+            }
+
+            function getBirthdayPeople(day, month, year) {
+                const key = `${String(day).padStart(2,'0')}.${String(month).padStart(2,'0')}`;
+                const result = [];
+
+                if (momsMap[key]) {
+                    momsMap[key].forEach(m => {
+                        result.push({
+                            type: 'mom',
+                            name: m.name,
+                            nameGen: m.nameGen,
+                            age: null,
+                            gender: null
+                        });
+                    });
+                }
+
+                if (kidsMap[key]) {
+                    kidsMap[key].forEach(k => {
+                        const age = getAge(k.birthYear, month, day, year, month, day);
+                        result.push({
+                            type: 'kid',
+                            mom: k.mom,
+                            momGen: k.momGen,
+                            baby: k.baby,
+                            babyGen: k.babyGen,
+                            age: age,
+                            gender: k.gender || 'male'
+                        });
+                    });
+                }
+
+                return result;
+            }
+
+            function getBirthdaysInMonth(month, year) {
+                const daysWithBirthdays = new Set();
+
+                Object.keys(momsMap).forEach(key => {
+                    const [d, m] = key.split('.').map(Number);
+                    if (m === month + 1) daysWithBirthdays.add(d);
+                });
+
+                Object.keys(kidsMap).forEach(key => {
+                    const [d, m] = key.split('.').map(Number);
+                    if (m === month + 1) daysWithBirthdays.add(d);
+                });
+
+                return Array.from(daysWithBirthdays).sort((a,b) => a - b);
+            }
+
+            function render() {
+                const first = new Date(currentYear, currentMonth, 1);
+                const last = new Date(currentYear, currentMonth + 1, 0);
+                const daysInMonth = last.getDate();
+                let start = first.getDay();
+                start = start === 0 ? 6 : start - 1;
+
+                const bdays = getBirthdaysInMonth(currentMonth, currentYear);
+                const count = bdays.length;
+
+                monthLabel.innerHTML = `${monthNamesNom[currentMonth]} <span class="year">${currentYear}</span>`;
+                countEl.textContent = count;
+                birthdayWordEl.textContent = getBirthdayWord(count);
+
+                grid.innerHTML = '';
+
+                for (let i = 0; i < start; i++) {
+                    const d = document.createElement('div');
+                    d.className = 'day empty';
+                    grid.appendChild(d);
+                }
+
+                const today = new Date();
+                const todayDate = today.getDate();
+                const todayMonth = today.getMonth();
+                const todayYear = today.getFullYear();
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const el = document.createElement('div');
+                    el.className = 'day';
+                    el.textContent = day;
+
+                    const key = `${String(day).padStart(2,'0')}.${String(currentMonth+1).padStart(2,'0')}`;
+                    const hasMom = !!momsMap[key];
+                    const hasKid = !!kidsMap[key];
+
+                    if (hasMom || hasKid) {
+                        el.classList.add('birthday');
+                        el.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const people = getBirthdayPeople(day, currentMonth + 1, currentYear);
+                            if (people.length) openModal(day, people);
+                        });
+                    }
+
+                    if (day === todayDate && currentMonth === todayMonth && currentYear === todayYear) {
+                        el.classList.add('today');
+                    }
+
+                    grid.appendChild(el);
+                }
+            }
+
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalDate = document.getElementById('modalDate');
+            const modalNames = document.getElementById('modalNames');
+            const closeBtn = document.getElementById('closeModalBtn');
+
+            function openModal(day, people) {
+                modalDate.innerHTML = `${day} <span class="month-name">${monthNames[currentMonth]}</span>`;
+
+                let html = '';
+                people.forEach((person, idx) => {
+                    if (idx > 0) html += `<div class="divider">✦</div>`;
+
+                    if (person.type === 'mom') {
+                        html += `
+                            <div class="birthday-entry">
+                                <div class="greeting">🎉 Сегодня день рождения <span class="name">${person.nameGen}</span>!</div>
+                            </div>
+                        `;
+                    } else if (person.type === 'kid') {
+                        const genderWord = person.gender === 'female' ? 'малышке' : 'малышу';
+                        const ageText = person.age >= 0 ? `${person.age} ${getAgeWord(person.age)}` : '';
+                        html += `
+                            <div class="birthday-entry">
+                                <div class="greeting">🎉 Сегодня день рождения <span class="name">${person.babyGen}</span>!</div>
+                                <div class="mom-info">👩 Мама: <strong>${person.mom}</strong></div>
+                                <div class="age-info">🎂 ${genderWord} исполняется ${ageText}</div>
+                            </div>
+                        `;
+                    }
+                });
+                modalNames.innerHTML = html;
+                modalOverlay.classList.add('active');
+            }
+
+            function closeModalFn() {
+                modalOverlay.classList.remove('active');
+            }
+
+            document.getElementById('prevMonth').addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+                render();
+            });
+            document.getElementById('nextMonth').addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+                render();
+            });
+            closeBtn.addEventListener('click', closeModalFn);
+            modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModalFn(); });
+
+            render();
+        })();
+    </script>
+</body>
+</html>
