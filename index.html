@@ -7,13 +7,13 @@
 
     <!-- ===== ПРЕВЬЮ ДЛЯ МЕССЕНДЖЕРОВ (СТАТИЧЕСКОЕ) ===== -->
     <meta property="og:title" content="🎉 Календарь дней рождения" />
-    <meta property="og:description" content="Дни рождения мам и малышей из чата 🎂" />
+    <meta property="og:description" content="Дни рождения мам и малышей из чата «Клуб разбитых коленок» 🎂" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://viktorikik.github.io/Viktorikik/" />
     <meta property="og:image" content="https://emojicdn.elk.sh/🎉?size=512" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="🎉 Календарь дней рождения" />
-    <meta name="twitter:description" content="Дни рождения мам и малышей из чата 🎂" />
+    <meta name="twitter:description" content="Дни рождения мам и малышей из чата «Клуб разбитых коленок» 🎂" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -334,8 +334,40 @@
             font-weight: 500;
         }
 
-        .summary {
+        /* ===== СТАТИСТИКА ===== */
+        .stats {
             margin-top: 16px;
+            background: rgba(255, 250, 245, 0.4);
+            border-radius: 60px;
+            padding: clamp(10px, 2.5vw, 14px) clamp(14px, 3vw, 20px);
+            text-align: center;
+            font-size: clamp(11px, 2.8vw, 13px);
+            font-weight: 300;
+            color: #b0957e;
+            border: 1px solid rgba(255, 245, 235, 0.3);
+            letter-spacing: 0.3px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        .stats strong {
+            color: #d4875e;
+            font-weight: 500;
+        }
+
+        .stats .highlight {
+            color: #d4875e;
+            font-weight: 500;
+        }
+
+        .summary {
+            margin-top: 10px;
             background: rgba(255, 250, 245, 0.4);
             border-radius: 60px;
             padding: clamp(10px, 2.5vw, 14px) clamp(14px, 3vw, 20px);
@@ -568,6 +600,37 @@
             }
         }
 
+        /* ===== АНИМАЦИИ ДЛЯ ИКОНОК ===== */
+        .icon-bounce {
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .icon-spin {
+            display: inline-block;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .icon-pulse {
+            display: inline-block;
+            animation: iconPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
         @media (max-width: 380px) {
             .calendar-app {
                 padding: 16px 12px 16px;
@@ -680,6 +743,17 @@
                 background: rgba(255, 250, 245, 0.08);
                 color: #f5ede8;
             }
+            .stats {
+                color: #8a7a6a;
+                border-color: rgba(255, 245, 235, 0.06);
+                background: rgba(255, 250, 245, 0.05);
+            }
+            .stats strong {
+                color: #e8a87c;
+            }
+            .stats .highlight {
+                color: #e8a87c;
+            }
             .summary {
                 color: #8a7a6a;
                 border-color: rgba(255, 245, 235, 0.06);
@@ -778,9 +852,9 @@
 <body>
     <div class="calendar-app" role="main">
         <div class="calendar-header">
-            <h1>✨ Дни рождения участников чата</h1>
+            <h1>✨ Дни рождения участников чата<br>«Клуб разбитых коленок»</h1>
             <div class="subtitle">
-                <span>👩</span> мамы <span>·</span> <span>🎈</span> малыши
+                <span class="icon-bounce">👩</span> мамы <span>·</span> <span class="icon-spin">🎈</span> малыши
             </div>
         </div>
 
@@ -816,6 +890,8 @@
         <div class="summary" id="summary">
             🎂 В этом месяце <strong id="birthdayCount">0</strong> <span class="word" id="birthdayWord">именинников</span>
         </div>
+
+        <div class="stats" id="stats"></div>
     </div>
 
     <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
@@ -863,10 +939,20 @@
                 return 'именинников';
             }
 
+            function getMonthWord(count) {
+                const last = count % 10;
+                const lastTwo = count % 100;
+                if (lastTwo >= 11 && lastTwo <= 19) return 'месяцев';
+                if (last === 1) return 'месяц';
+                if (last >= 2 && last <= 4) return 'месяца';
+                return 'месяцев';
+            }
+
             // ===== ДАННЫЕ =====
             const momsData = [
                 { day: 12, month: 1, name: "Кристина", nameGen: "Кристины" },
                 { day: 1, month: 2, name: "Лена (Elena_Fairytale)", nameGen: "Лены (Elena_Fairytale)" },
+                { day: 8, month: 2, name: "Елена (Kuzerochka)", nameGen: "Елены (Kuzerochka)" },
                 { day: 2, month: 3, name: "Оля (skripkina_dizain)", nameGen: "Оли (skripkina_dizain)" },
                 { day: 31, month: 3, name: "Катя (Keti3103)", nameGen: "Кати (Keti3103)" },
                 { day: 1, month: 4, name: "Даша", nameGen: "Даши" },
@@ -933,6 +1019,7 @@
             const modalDate = document.getElementById('modalDate');
             const modalNames = document.getElementById('modalNames');
             const closeBtn = document.getElementById('closeModalBtn');
+            const statsEl = document.getElementById('stats');
 
             let currentFilter = 'all';
 
@@ -980,6 +1067,10 @@
                 if (last === 1) return 'год';
                 if (last >= 2 && last <= 4) return 'года';
                 return 'лет';
+            }
+
+            function getGenderEmoji(gender) {
+                return gender === 'female' ? '👧' : '👦';
             }
 
             // ===== ПОЛУЧЕНИЕ ИМЕННИНКОВ =====
@@ -1064,6 +1155,81 @@
                 return getBirthdayPeopleInMonth(month, year, filter).length;
             }
 
+            // ===== СТАТИСТИКА =====
+            function calculateStats() {
+                const today = new Date();
+                const currentYear = today.getFullYear();
+                
+                // Собираем всех именинников в текущем году
+                let allBirthdays = [];
+                
+                // Мамы
+                Object.keys(momsMap).forEach(key => {
+                    const [day, month] = key.split('.').map(Number);
+                    allBirthdays.push({
+                        day: day,
+                        month: month,
+                        type: 'mom',
+                        name: momsMap[key][0].name
+                    });
+                });
+                
+                // Дети
+                Object.keys(kidsMap).forEach(key => {
+                    const [day, month] = key.split('.').map(Number);
+                    kidsMap[key].forEach(kid => {
+                        allBirthdays.push({
+                            day: day,
+                            month: month,
+                            type: 'kid',
+                            name: kid.baby,
+                            gender: kid.gender || 'male'
+                        });
+                    });
+                });
+
+                // Статистика по месяцам
+                const monthStats = {};
+                allBirthdays.forEach(b => {
+                    if (!monthStats[b.month]) monthStats[b.month] = 0;
+                    monthStats[b.month]++;
+                });
+
+                // Находим самый популярный месяц
+                let maxCount = 0;
+                let popularMonth = 0;
+                Object.keys(monthStats).forEach(month => {
+                    if (monthStats[month] > maxCount) {
+                        maxCount = monthStats[month];
+                        popularMonth = parseInt(month);
+                    }
+                });
+
+                // Количество именинников в этом году (учитываем только тех, у кого день рождения уже прошел или еще будет)
+                const total = allBirthdays.length;
+
+                return {
+                    total: total,
+                    popularMonth: popularMonth,
+                    popularMonthCount: maxCount
+                };
+            }
+
+            // ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
+            function updateStats() {
+                const stats = calculateStats();
+                if (stats.total === 0) {
+                    statsEl.textContent = '📊 Статистика пока недоступна';
+                    return;
+                }
+
+                const monthName = monthNamesNom[stats.popularMonth - 1];
+                statsEl.innerHTML = `
+                    📊 В этом году <strong>${stats.total}</strong> ${getBirthdayWord(stats.total)} 
+                    · Самый популярный месяц — <strong>${monthName}</strong> (${stats.popularMonthCount} ${getBirthdayWord(stats.popularMonthCount)})
+                `;
+            }
+
             // ===== РЕНДЕР =====
             function render() {
                 const first = new Date(currentYear, currentMonth, 1);
@@ -1131,6 +1297,8 @@
 
                     grid.appendChild(el);
                 }
+
+                updateStats();
             }
 
             // ===== МОДАЛКА =====
@@ -1150,9 +1318,10 @@
                     } else if (person.type === 'kid') {
                         const genderWord = person.gender === 'female' ? 'малышке' : 'малышу';
                         const ageText = person.age >= 0 ? `${person.age} ${getAgeWord(person.age)}` : '';
+                        const genderEmoji = getGenderEmoji(person.gender);
                         html += `
                             <div class="birthday-entry">
-                                <div class="greeting">🎉 Сегодня день рождения <span class="name">${person.babyGen}</span>!</div>
+                                <div class="greeting">${genderEmoji} Сегодня день рождения <span class="name">${person.babyGen}</span>!</div>
                                 <div class="mom-info">👩 Мама: <strong>${person.mom}</strong></div>
                                 <div class="age-info">🎂 ${genderWord} исполняется ${ageText}</div>
                             </div>
