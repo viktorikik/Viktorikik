@@ -1126,27 +1126,42 @@
                     // Определяем год, в котором будет этот день рождения
                     let targetYear = todayYear;
                     
-                    // Если день рождения уже прошёл в этом году (или сегодня и уже поздно)
+                    // Создаем дату дня рождения в этом году
                     const birthdayThisYear = new Date(todayYear, b.month - 1, b.day);
+                    
+                    // Проверяем, прошел ли уже этот день рождения в этом году
+                    // Если сегодня день рождения - он считается следующим (если еще не прошел)
                     const isPast = birthdayThisYear < today;
                     
                     if (isPast) {
-                        // Если уже прошёл — переносим на следующий год
+                        // Если уже прошел — переносим на следующий год
                         targetYear = todayYear + 1;
                     }
                     
                     const targetDate = new Date(targetYear, b.month - 1, b.day);
                     const diff = targetDate - today;
                     
-                    if (diff > 0 && diff < minDiff) {
+                    // Ищем минимальную положительную разницу
+                    if (diff >= 0 && diff < minDiff) {
                         minDiff = diff;
                         next = b;
                     }
                 });
 
-                // Если не нашли (маловероятно) — берём первый попавшийся
+                // Если не нашли (все дни рождения уже прошли сегодня или раньше)
                 if (!next && allBirthdays.length > 0) {
-                    next = allBirthdays[0];
+                    // Берем самый ранний день рождения в следующем году
+                    let earliest = null;
+                    let earliestDiff = Infinity;
+                    allBirthdays.forEach(b => {
+                        const targetDate = new Date(todayYear + 1, b.month - 1, b.day);
+                        const diff = targetDate - today;
+                        if (diff < earliestDiff) {
+                            earliestDiff = diff;
+                            earliest = b;
+                        }
+                    });
+                    next = earliest;
                 }
 
                 return next;
