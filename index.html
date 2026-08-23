@@ -1,10 +1,8 @@
-Index.html
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
     <title>Дни рождения</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,45 +12,50 @@ Index.html
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: #f7f0e8;
             background-image: radial-gradient(ellipse at 30% 20%, #fdf6ef 0%, #f0e4d8 100%);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 12px;
             color: #2d2a24;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .calendar-app {
-            max-width: 620px;
+            max-width: 560px;
             width: 100%;
             background: rgba(255, 250, 245, 0.78);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-radius: 40px;
-            padding: 32px 28px 28px;
+            border-radius: 32px;
+            padding: 24px 18px 22px;
             border: 1px solid rgba(255, 245, 235, 0.5);
             box-shadow: 0 24px 64px rgba(180, 120, 80, 0.08), 0 4px 16px rgba(180, 120, 80, 0.04);
+            transition: padding 0.2s ease;
         }
 
-        /* Заголовок */
+        /* ===== ЗАГОЛОВОК ===== */
         .calendar-header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 18px;
         }
 
         .calendar-header h1 {
             font-family: 'Playfair Display', serif;
             font-weight: 400;
-            font-size: 32px;
+            font-size: clamp(24px, 6vw, 32px);
             color: #3d2c1e;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+            margin-bottom: 0px;
         }
 
         .calendar-header h1 span {
@@ -64,7 +67,7 @@ Index.html
         }
 
         .subtitle {
-            font-size: 13px;
+            font-size: clamp(10px, 2.5vw, 13px);
             font-weight: 300;
             color: #b0957e;
             letter-spacing: 2px;
@@ -73,80 +76,96 @@ Index.html
         }
 
         .subtitle span {
-            margin: 0 4px;
+            margin: 0 3px;
         }
 
-        /* Навигация по месяцам */
+        /* ===== НАВИГАЦИЯ ===== */
         .month-selector {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 24px;
+            gap: clamp(12px, 3vw, 20px);
+            margin-bottom: 18px;
+            touch-action: manipulation;
         }
 
         .nav-btn {
             background: rgba(255, 250, 245, 0.5);
             border: 1px solid rgba(200, 160, 130, 0.2);
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
+            width: clamp(40px, 10vw, 44px);
+            height: clamp(40px, 10vw, 44px);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: clamp(16px, 4vw, 18px);
             color: #b8957a;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             font-family: 'Inter', sans-serif;
             font-weight: 300;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.88);
+            background: rgba(255, 250, 245, 0.9);
         }
 
         .nav-btn:hover {
             background: rgba(255, 250, 245, 0.8);
             color: #7a5a42;
             border-color: rgba(200, 160, 130, 0.4);
-            transform: scale(1.04);
-            box-shadow: 0 4px 16px rgba(200, 160, 130, 0.1);
         }
 
-        .nav-btn:active {
-            transform: scale(0.92);
+        @media (hover: none) {
+            .nav-btn:hover {
+                transform: none;
+                background: rgba(255, 250, 245, 0.5);
+            }
+            .nav-btn:active {
+                transform: scale(0.88);
+                background: rgba(255, 250, 245, 0.9);
+            }
         }
 
         .current-month {
             font-family: 'Playfair Display', serif;
             font-weight: 400;
-            font-size: 22px;
+            font-size: clamp(18px, 4.5vw, 22px);
             color: #3d2c1e;
-            min-width: 160px;
+            min-width: 130px;
             text-align: center;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .current-month .year {
             font-weight: 300;
             color: #d4875e;
-            font-size: 18px;
+            font-size: clamp(15px, 3.5vw, 18px);
         }
 
-        /* Сетка календаря */
+        /* ===== ДНИ НЕДЕЛИ ===== */
         .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             text-align: center;
-            font-size: 11px;
+            font-size: clamp(9px, 2vw, 11px);
             font-weight: 500;
             color: #b0957e;
-            margin-bottom: 12px;
-            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
+        /* ===== СЕТКА КАЛЕНДАРЯ ===== */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
+            gap: clamp(3px, 1vw, 6px);
         }
 
         .day {
@@ -155,57 +174,69 @@ Index.html
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            font-size: 16px;
+            font-size: clamp(13px, 3.5vw, 16px);
             font-weight: 400;
             color: #8a7a6a;
-            background: rgba(255, 250, 245, 0.3);
-            transition: all 0.2s ease;
+            background: rgba(255, 250, 245, 0.2);
+            transition: all 0.15s ease;
             border: 1px solid transparent;
             cursor: default;
             position: relative;
             font-family: 'Inter', sans-serif;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            user-select: none;
+            min-height: 0;
         }
 
+        /* Пустые ячейки */
         .day.empty {
             background: transparent;
             border: none;
             cursor: default;
         }
 
-        .day:not(.empty):not(.birthday):hover {
-            background: rgba(255, 250, 245, 0.6);
-            transform: translateY(-1px);
+        /* Обычный день — только на десктопе ховер */
+        @media (hover: hover) {
+            .day:not(.empty):not(.birthday):hover {
+                background: rgba(255, 250, 245, 0.6);
+                transform: translateY(-1px);
+            }
         }
 
-        /* День с именинником — осенние цвета */
+        /* ===== ДЕНЬ С ИМЕНИННИКОМ ===== */
         .day.birthday {
             background: linear-gradient(135deg, #f7e0cc, #f5d4ba);
             color: #5a3f2e;
             font-weight: 500;
             border-color: #e8b48c;
-            box-shadow: 0 2px 12px rgba(212, 135, 94, 0.15);
+            box-shadow: 0 2px 12px rgba(212, 135, 94, 0.12);
             cursor: pointer;
         }
 
-        .day.birthday:hover {
+        .day.birthday:active {
+            transform: scale(0.88);
             background: linear-gradient(135deg, #f5d4ba, #f0c8ac);
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 6px 24px rgba(212, 135, 94, 0.2);
         }
 
-        .day.birthday:active {
-            transform: scale(0.92);
+        @media (hover: hover) {
+            .day.birthday:hover {
+                background: linear-gradient(135deg, #f5d4ba, #f0c8ac);
+                transform: translateY(-2px) scale(1.02);
+                box-shadow: 0 6px 24px rgba(212, 135, 94, 0.18);
+            }
         }
 
         .day.birthday::after {
             content: '✦';
             position: absolute;
-            bottom: 2px;
-            font-size: 10px;
+            bottom: clamp(1px, 0.5vw, 3px);
+            font-size: clamp(7px, 1.8vw, 10px);
             color: #d4875e;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
+        /* ===== СЕГОДНЯ ===== */
         .day.today {
             border-color: #d4875e;
             border-width: 2px;
@@ -214,18 +245,24 @@ Index.html
             font-weight: 500;
         }
 
-        /* Суммарий — со склонением */
+        /* ===== СУММАРИЙ ===== */
         .summary {
-            margin-top: 24px;
+            margin-top: 18px;
             background: rgba(255, 250, 245, 0.4);
             border-radius: 60px;
-            padding: 14px 20px;
+            padding: clamp(10px, 2.5vw, 14px) clamp(14px, 3vw, 20px);
             text-align: center;
-            font-size: 14px;
+            font-size: clamp(12px, 3vw, 14px);
             font-weight: 300;
             color: #b0957e;
             border: 1px solid rgba(255, 245, 235, 0.3);
             letter-spacing: 0.3px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
         }
 
         .summary strong {
@@ -233,7 +270,12 @@ Index.html
             font-weight: 600;
         }
 
-        /* Модалка */
+        .summary .word {
+            color: #d4875e;
+            font-weight: 400;
+        }
+
+        /* ===== МОДАЛКА ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -241,33 +283,45 @@ Index.html
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(60, 45, 35, 0.3);
+            height: 100dvh;
+            background: rgba(60, 45, 35, 0.25);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             justify-content: center;
             align-items: center;
             z-index: 999;
-            padding: 20px;
+            padding: 16px;
+            animation: fadeIn 0.25s ease;
         }
 
         .modal-overlay.active {
             display: flex;
         }
 
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
         .modal-card {
-            background: rgba(255, 250, 245, 0.95);
+            background: rgba(255, 250, 245, 0.96);
             backdrop-filter: blur(20px);
-            border-radius: 40px;
-            padding: 36px 28px 32px;
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: clamp(24px, 6vw, 36px) clamp(18px, 4vw, 28px) clamp(24px, 5vw, 32px);
             max-width: 380px;
             width: 100%;
             text-align: center;
             border: 1px solid rgba(255, 245, 235, 0.6);
             box-shadow: 0 40px 80px rgba(180, 120, 80, 0.12), 0 8px 24px rgba(180, 120, 80, 0.04);
-            animation: pop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 90vh;
+            max-height: 90dvh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        @keyframes pop {
+        @keyframes popIn {
             0% { opacity: 0; transform: scale(0.92) translateY(12px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
@@ -276,7 +330,7 @@ Index.html
             float: right;
             background: none;
             border: none;
-            font-size: 20px;
+            font-size: clamp(18px, 4vw, 20px);
             color: #b0957e;
             cursor: pointer;
             transition: color 0.2s;
@@ -286,20 +340,30 @@ Index.html
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            touch-action: manipulation;
         }
 
-        .modal-close:hover {
+        .modal-close:active {
+            background: rgba(60, 45, 35, 0.06);
             color: #3d2c1e;
-            background: rgba(60, 45, 35, 0.04);
+        }
+
+        @media (hover: hover) {
+            .modal-close:hover {
+                color: #3d2c1e;
+                background: rgba(60, 45, 35, 0.04);
+            }
         }
 
         .modal-date {
             font-family: 'Playfair Display', serif;
             font-weight: 400;
-            font-size: 24px;
+            font-size: clamp(20px, 5vw, 24px);
             color: #3d2c1e;
-            margin: 4px 0 18px;
+            margin: 4px 0 16px;
             letter-spacing: 0.5px;
+            clear: both;
+            padding-top: 4px;
         }
 
         .modal-date .month-name {
@@ -308,8 +372,8 @@ Index.html
 
         .birthday-entry {
             background: rgba(247, 224, 204, 0.25);
-            padding: 18px 16px;
-            border-radius: 28px;
+            padding: clamp(14px, 3vw, 18px) clamp(12px, 2.5vw, 16px);
+            border-radius: 24px;
             margin-bottom: 10px;
             border: 1px solid rgba(200, 160, 130, 0.08);
         }
@@ -320,10 +384,11 @@ Index.html
 
         .greeting {
             font-family: 'Playfair Display', serif;
-            font-size: 20px;
+            font-size: clamp(17px, 4.5vw, 20px);
             font-weight: 400;
             color: #3d2c1e;
             margin-bottom: 4px;
+            line-height: 1.3;
         }
 
         .greeting .name {
@@ -332,7 +397,7 @@ Index.html
         }
 
         .mom-info {
-            font-size: 15px;
+            font-size: clamp(13px, 3vw, 15px);
             color: #b0957e;
             font-weight: 300;
             margin-top: 2px;
@@ -344,7 +409,7 @@ Index.html
         }
 
         .age-info {
-            font-size: 15px;
+            font-size: clamp(13px, 3vw, 15px);
             color: #d4875e;
             font-weight: 400;
             margin-top: 4px;
@@ -353,38 +418,179 @@ Index.html
         .divider {
             color: #dcc8b8;
             margin: 8px 0;
-            font-size: 12px;
+            font-size: clamp(10px, 2.5vw, 12px);
             letter-spacing: 2px;
         }
 
-        @media (max-width: 480px) {
+        /* ===== АДАПТИВ ДЛЯ ОЧЕНЬ МАЛЕНЬКИХ ЭКРАНОВ ===== */
+        @media (max-width: 380px) {
             .calendar-app {
-                padding: 20px 16px;
-                border-radius: 28px;
+                padding: 16px 12px 16px;
+                border-radius: 24px;
             }
-            .calendar-header h1 {
-                font-size: 26px;
-            }
-            .current-month {
-                font-size: 18px;
-                min-width: 120px;
+            .calendar-grid {
+                gap: 2px;
             }
             .day {
-                font-size: 14px;
+                font-size: 12px;
                 border-radius: 50%;
-                min-height: 40px;
+                min-height: 32px;
+            }
+            .day.birthday::after {
+                font-size: 6px;
+                bottom: 1px;
+            }
+            .weekdays {
+                font-size: 8px;
+            }
+            .current-month {
+                min-width: 100px;
+                font-size: 16px;
+            }
+            .nav-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+        }
+
+        /* ===== АДАПТИВ ДЛЯ ПЛАНШЕТОВ И ДЕСКТОПА ===== */
+        @media (min-width: 768px) {
+            .calendar-app {
+                padding: 36px 32px 30px;
+                border-radius: 40px;
+            }
+            .day {
+                font-size: 18px;
+                min-height: 60px;
+            }
+            .calendar-grid {
+                gap: 8px;
+            }
+            .weekdays {
+                font-size: 13px;
+            }
+        }
+
+        /* ===== ПОДДЕРЖКА SAFARI НА iPhone ===== */
+        @supports (-webkit-touch-callout: none) {
+            .calendar-app {
+                padding: 20px 16px 18px;
+            }
+        }
+
+        /* ===== DARK MODE ===== */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1410;
+                background-image: radial-gradient(ellipse at 30% 20%, #2a1e16 0%, #1a1410 100%);
+            }
+            .calendar-app {
+                background: rgba(30, 22, 18, 0.85);
+                border-color: rgba(255, 245, 235, 0.06);
+            }
+            .calendar-header h1 {
+                color: #f0e4d8;
+            }
+            .current-month {
+                color: #f0e4d8;
+            }
+            .current-month .year {
+                color: #e8a87c;
+            }
+            .weekdays {
+                color: #8a7a6a;
+            }
+            .day {
+                color: #8a7a6a;
+                background: rgba(255, 250, 245, 0.05);
+            }
+            .day.birthday {
+                background: linear-gradient(135deg, #5a3f2e, #7a5a42);
+                color: #f5ede8;
+                border-color: #d4875e;
+                box-shadow: 0 2px 12px rgba(212, 135, 94, 0.1);
+            }
+            .day.birthday:active {
+                background: linear-gradient(135deg, #6a4f3e, #8a6a52);
+            }
+            @media (hover: hover) {
+                .day.birthday:hover {
+                    background: linear-gradient(135deg, #6a4f3e, #8a6a52);
+                }
+                .day:not(.empty):not(.birthday):hover {
+                    background: rgba(255, 250, 245, 0.08);
+                }
+            }
+            .day.today {
+                border-color: #e8a87c;
+                background: rgba(255, 250, 245, 0.08);
+                color: #f5ede8;
+            }
+            .summary {
+                color: #8a7a6a;
+                border-color: rgba(255, 245, 235, 0.06);
+                background: rgba(255, 250, 245, 0.05);
+            }
+            .summary strong {
+                color: #e8a87c;
+            }
+            .summary .word {
+                color: #e8a87c;
+            }
+            .modal-overlay {
+                background: rgba(0, 0, 0, 0.5);
             }
             .modal-card {
-                padding: 28px 20px 24px;
+                background: rgba(30, 22, 18, 0.95);
+                border-color: rgba(255, 245, 235, 0.06);
+            }
+            .modal-date {
+                color: #f0e4d8;
+            }
+            .modal-date .month-name {
+                color: #e8a87c;
             }
             .greeting {
-                font-size: 18px;
+                color: #f0e4d8;
+            }
+            .greeting .name {
+                color: #e8a87c;
+            }
+            .mom-info {
+                color: #8a7a6a;
+            }
+            .mom-info strong {
+                color: #f0e4d8;
+            }
+            .age-info {
+                color: #e8a87c;
+            }
+            .birthday-entry {
+                background: rgba(247, 224, 204, 0.06);
+                border-color: rgba(200, 160, 130, 0.06);
+            }
+            .divider {
+                color: #5a4a3a;
+            }
+            .modal-close {
+                color: #8a7a6a;
+            }
+            .modal-close:active {
+                color: #f0e4d8;
+                background: rgba(255, 250, 245, 0.06);
+            }
+            @media (hover: hover) {
+                .modal-close:hover {
+                    color: #f0e4d8;
+                    background: rgba(255, 250, 245, 0.06);
+                }
             }
         }
     </style>
 </head>
 <body>
-    <div class="calendar-app">
+    <div class="calendar-app" role="main">
         <div class="calendar-header">
             <h1>✨ <span>Дни</span> рождения</h1>
             <div class="subtitle">
@@ -393,31 +599,36 @@ Index.html
         </div>
 
         <div class="month-selector">
-            <button class="nav-btn" id="prevMonth">‹</button>
+            <button class="nav-btn" id="prevMonth" aria-label="Предыдущий месяц">‹</button>
             <span class="current-month" id="currentMonthLabel">
-                Январь <span class="year">2025</span>
+                Август <span class="year">2026</span>
             </span>
-            <button class="nav-btn" id="nextMonth">›</button>
+            <button class="nav-btn" id="nextMonth" aria-label="Следующий месяц">›</button>
         </div>
 
-        <div class="weekdays">
-            <span>Пн</span><span>Вт</span><span>Ср</span>
-            <span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+        <div class="weekdays" role="row">
+            <span role="columnheader">Пн</span>
+            <span role="columnheader">Вт</span>
+            <span role="columnheader">Ср</span>
+            <span role="columnheader">Чт</span>
+            <span role="columnheader">Пт</span>
+            <span role="columnheader">Сб</span>
+            <span role="columnheader">Вс</span>
         </div>
 
-        <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="calendar-grid" id="calendarGrid" role="grid"></div>
 
         <div class="summary" id="summary">
-            🎂 В этом месяце <strong id="birthdayCount">0</strong> <span id="birthdayWord">именинников</span>
+            🎂 В этом месяце <strong id="birthdayCount">0</strong> <span class="word" id="birthdayWord">именинников</span>
         </div>
     </div>
 
     <!-- Модалка -->
-    <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
         <div class="modal-card">
-            <button class="modal-close" id="closeModalBtn">✕</button>
+            <button class="modal-close" id="closeModalBtn" aria-label="Закрыть">✕</button>
             <div class="modal-date" id="modalDate">
-                13 <span class="month-name">января</span>
+                13 <span class="month-name">августа</span>
             </div>
             <div id="modalNames"></div>
         </div>
@@ -599,6 +810,7 @@ Index.html
                 for (let i = 0; i < start; i++) {
                     const d = document.createElement('div');
                     d.className = 'day empty';
+                    d.setAttribute('role', 'gridcell');
                     grid.appendChild(d);
                 }
 
@@ -611,6 +823,7 @@ Index.html
                     const el = document.createElement('div');
                     el.className = 'day';
                     el.textContent = day;
+                    el.setAttribute('role', 'gridcell');
 
                     const key = `${String(day).padStart(2,'0')}.${String(currentMonth+1).padStart(2,'0')}`;
                     const hasMom = !!momsMap[key];
@@ -623,6 +836,9 @@ Index.html
                             const people = getBirthdayPeople(day, currentMonth + 1, currentYear);
                             if (people.length) openModal(day, people);
                         });
+                        el.addEventListener('touchstart', function(e) {
+                            // небольшая задержка, чтобы не конфликтовать с кликом
+                        }, { passive: true });
                     }
 
                     if (day === todayDate && currentMonth === todayMonth && currentYear === todayYear) {
@@ -665,10 +881,12 @@ Index.html
                 });
                 modalNames.innerHTML = html;
                 modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
 
             function closeModalFn() {
                 modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
             }
 
             document.getElementById('prevMonth').addEventListener('click', () => {
@@ -676,13 +894,49 @@ Index.html
                 if (currentMonth < 0) { currentMonth = 11; currentYear--; }
                 render();
             });
+
             document.getElementById('nextMonth').addEventListener('click', () => {
                 currentMonth++;
                 if (currentMonth > 11) { currentMonth = 0; currentYear++; }
                 render();
             });
+
+            // Поддержка свайпов на мобильных
+            let touchStartX = 0;
+            let touchStartY = 0;
+            const app = document.querySelector('.calendar-app');
+
+            app.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            app.addEventListener('touchend', function(e) {
+                const touchEndX = e.changedTouches[0].screenX;
+                const touchEndY = e.changedTouches[0].screenY;
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = touchEndY - touchStartY;
+
+                // Если свайп горизонтальный и достаточно длинный
+                if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+                    if (deltaX < 0) {
+                        // Свайп влево → следующий месяц
+                        document.getElementById('nextMonth').click();
+                    } else {
+                        // Свайп вправо → предыдущий месяц
+                        document.getElementById('prevMonth').click();
+                    }
+                }
+            }, { passive: true });
+
             closeBtn.addEventListener('click', closeModalFn);
-            modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModalFn(); });
+            modalOverlay.addEventListener('click', e => {
+                if (e.target === modalOverlay) closeModalFn();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModalFn();
+            });
 
             render();
         })();
