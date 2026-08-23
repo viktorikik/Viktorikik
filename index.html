@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
     <title>🎉 Дни рождения</title>
     
-    <!-- ===== OPEN GRAPH ДЛЯ КРАСИВОГО ПРЕВЬЮ ===== -->
+    <!-- Open Graph для красивого превью -->
     <meta property="og:title" content="🎉 Дни рождения мам и малышей" />
     <meta property="og:description" content="Календарь дней рождения с красивым дизайном. Мамы и малыши — все в одном месте!" />
     <meta property="og:type" content="website" />
@@ -64,10 +64,11 @@
         .calendar-header h1 {
             font-family: 'Playfair Display', serif;
             font-weight: 400;
-            font-size: clamp(24px, 6vw, 32px);
+            font-size: clamp(20px, 5vw, 28px);
             color: #3d2c1e;
             letter-spacing: 0.5px;
-            margin-bottom: 0px;
+            margin-bottom: 2px;
+            line-height: 1.2;
         }
 
         .calendar-header h1 span {
@@ -87,68 +88,12 @@
             margin-top: 2px;
         }
 
-        /* ===== ПОИСК И ФИЛЬТРЫ ===== */
+        /* ===== ФИЛЬТРЫ (только кнопки, поиск убран) ===== */
         .controls {
             display: flex;
             flex-direction: column;
             gap: 10px;
             margin-bottom: 16px;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 250, 245, 0.6);
-            border-radius: 60px;
-            padding: 0 16px;
-            border: 1px solid rgba(200, 160, 130, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .search-box:focus-within {
-            border-color: #d4875e;
-            box-shadow: 0 0 0 3px rgba(212, 135, 94, 0.15);
-        }
-
-        .search-box .icon {
-            font-size: 16px;
-            color: #b0957e;
-            margin-right: 10px;
-        }
-
-        .search-box input {
-            flex: 1;
-            background: none;
-            border: none;
-            padding: 12px 0;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            color: #3d2c1e;
-            outline: none;
-        }
-
-        .search-box input::placeholder {
-            color: #b0957e;
-            font-weight: 300;
-        }
-
-        .search-box .clear-btn {
-            background: none;
-            border: none;
-            font-size: 18px;
-            color: #b0957e;
-            cursor: pointer;
-            padding: 4px 8px;
-            display: none;
-            transition: color 0.2s;
-        }
-
-        .search-box .clear-btn.visible {
-            display: block;
-        }
-
-        .search-box .clear-btn:active {
-            color: #d4875e;
         }
 
         .filter-buttons {
@@ -213,7 +158,7 @@
         .month-selector .year-nav {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .year-nav select {
@@ -232,7 +177,7 @@
             background-position: right 12px center;
             padding-right: 36px;
             font-weight: 400;
-            min-width: 90px;
+            min-width: 80px;
             text-align: center;
         }
 
@@ -279,16 +224,10 @@
             font-weight: 400;
             font-size: clamp(18px, 4.5vw, 22px);
             color: #3d2c1e;
-            min-width: 110px;
+            min-width: 100px;
             text-align: center;
             letter-spacing: 0.5px;
             white-space: nowrap;
-        }
-
-        .current-month .year {
-            font-weight: 300;
-            color: #d4875e;
-            font-size: clamp(14px, 3vw, 17px);
         }
 
         /* ===== ДНИ НЕДЕЛИ ===== */
@@ -361,7 +300,6 @@
             background: linear-gradient(135deg, #f5d4ba, #f0c8ac);
         }
 
-        /* Анимация пульсации для дней с именинниками */
         .day.birthday.pulse {
             animation: pulseGlow 1.5s ease-in-out;
         }
@@ -592,20 +530,6 @@
             letter-spacing: 2px;
         }
 
-        .no-results {
-            text-align: center;
-            padding: 30px 20px;
-            color: #b0957e;
-            font-weight: 300;
-            font-size: 16px;
-        }
-
-        .no-results .icon {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 12px;
-        }
-
         /* ===== АДАПТИВ ===== */
         @media (max-width: 380px) {
             .calendar-app {
@@ -628,7 +552,7 @@
                 font-size: 8px;
             }
             .current-month {
-                min-width: 90px;
+                min-width: 80px;
                 font-size: 16px;
             }
             .nav-btn {
@@ -639,15 +563,11 @@
             .year-nav select {
                 font-size: 14px;
                 padding: 2px 30px 2px 12px;
-                min-width: 70px;
+                min-width: 65px;
             }
             .filter-btn {
                 font-size: 10px;
                 padding: 4px 12px;
-            }
-            .search-box input {
-                font-size: 12px;
-                padding: 10px 0;
             }
         }
 
@@ -690,9 +610,6 @@
             }
             .current-month {
                 color: #f0e4d8;
-            }
-            .current-month .year {
-                color: #e8a87c;
             }
             .weekdays {
                 color: #8a7a6a;
@@ -776,16 +693,6 @@
                 color: #f0e4d8;
                 background: rgba(255, 250, 245, 0.06);
             }
-            .search-box {
-                background: rgba(255, 250, 245, 0.05);
-                border-color: rgba(200, 160, 130, 0.1);
-            }
-            .search-box input {
-                color: #f0e4d8;
-            }
-            .search-box input::placeholder {
-                color: #6a5a4a;
-            }
             .filter-btn {
                 background: rgba(255, 250, 245, 0.05);
                 border-color: rgba(200, 160, 130, 0.1);
@@ -831,19 +738,14 @@
 <body>
     <div class="calendar-app" role="main">
         <div class="calendar-header">
-            <h1>✨ <span>Дни</span> рождения</h1>
+            <h1>✨ <span>Дни рождения</span> участников чата<br>«Клуб разбитых коленок»</h1>
             <div class="subtitle">
                 <span>👩</span> мамы <span>·</span> <span>🎈</span> малыши
             </div>
         </div>
 
-        <!-- ===== ПОИСК И ФИЛЬТРЫ ===== -->
+        <!-- ===== ТОЛЬКО ФИЛЬТРЫ (ПОИСК УБРАН) ===== -->
         <div class="controls">
-            <div class="search-box">
-                <span class="icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Поиск по имени..." autocomplete="off">
-                <button class="clear-btn" id="clearSearch">✕</button>
-            </div>
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">👥 Все</button>
                 <button class="filter-btn" data-filter="moms">👩 Мамы</button>
@@ -855,9 +757,7 @@
         <div class="month-selector">
             <button class="nav-btn" id="prevMonth" aria-label="Предыдущий месяц">‹</button>
             <div class="year-nav">
-                <span class="current-month" id="currentMonthLabel">
-                    Август <span class="year">2026</span>
-                </span>
+                <span class="current-month" id="currentMonthLabel">Август</span>
                 <select id="yearSelect"></select>
             </div>
             <button class="nav-btn" id="nextMonth" aria-label="Следующий месяц">›</button>
@@ -968,12 +868,9 @@
             const countEl = document.getElementById('birthdayCount');
             const birthdayWordEl = document.getElementById('birthdayWord');
             const yearSelect = document.getElementById('yearSelect');
-            const searchInput = document.getElementById('searchInput');
-            const clearSearch = document.getElementById('clearSearch');
             const filterBtns = document.querySelectorAll('.filter-btn');
 
             let currentFilter = 'all';
-            let searchQuery = '';
 
             // ===== ЗАПОЛНЯЕМ ВЫБОР ГОДА =====
             function populateYearSelect() {
@@ -1056,24 +953,19 @@
                 return result;
             }
 
-            function getBirthdayPeopleInMonth(month, year, filter, search) {
+            function getBirthdayPeopleInMonth(month, year, filter) {
                 const result = [];
-                const searchLower = search ? search.toLowerCase().trim() : '';
 
                 Object.keys(momsMap).forEach(key => {
                     const [d, m] = key.split('.').map(Number);
                     if (m === month + 1) {
                         momsMap[key].forEach(mom => {
-                            const nameLower = mom.name.toLowerCase();
-                            const matchSearch = !searchLower || nameLower.includes(searchLower);
-                            const matchFilter = filter === 'all' || filter === 'moms';
-                            if (matchSearch && matchFilter) {
+                            if (filter === 'all' || filter === 'moms') {
                                 result.push({
                                     type: 'mom',
                                     day: d,
                                     name: mom.name,
-                                    nameGen: mom.nameGen,
-                                    searchName: mom.name
+                                    nameGen: mom.nameGen
                                 });
                             }
                         });
@@ -1084,10 +976,7 @@
                     const [d, m] = key.split('.').map(Number);
                     if (m === month + 1) {
                         kidsMap[key].forEach(kid => {
-                            const nameLower = kid.baby.toLowerCase();
-                            const matchSearch = !searchLower || nameLower.includes(searchLower);
-                            const matchFilter = filter === 'all' || filter === 'kids';
-                            if (matchSearch && matchFilter) {
+                            if (filter === 'all' || filter === 'kids') {
                                 const age = getAge(kid.birthYear, m, d, year, m, d);
                                 result.push({
                                     type: 'kid',
@@ -1097,8 +986,7 @@
                                     baby: kid.baby,
                                     babyGen: kid.babyGen,
                                     age: age,
-                                    gender: kid.gender || 'male',
-                                    searchName: kid.baby
+                                    gender: kid.gender || 'male'
                                 });
                             }
                         });
@@ -1108,15 +996,15 @@
                 return result.sort((a, b) => a.day - b.day);
             }
 
-            function getUniqueBirthdayDays(month, year, filter, search) {
-                const people = getBirthdayPeopleInMonth(month, year, filter, search);
+            function getUniqueBirthdayDays(month, year, filter) {
+                const people = getBirthdayPeopleInMonth(month, year, filter);
                 const days = new Set();
                 people.forEach(p => days.add(p.day));
                 return Array.from(days).sort((a, b) => a - b);
             }
 
-            function countBirthdayPeopleInMonth(month, year, filter, search) {
-                return getBirthdayPeopleInMonth(month, year, filter, search).length;
+            function countBirthdayPeopleInMonth(month, year, filter) {
+                return getBirthdayPeopleInMonth(month, year, filter).length;
             }
 
             // ===== РЕНДЕР =====
@@ -1127,10 +1015,11 @@
                 let start = first.getDay();
                 start = start === 0 ? 6 : start - 1;
 
-                const count = countBirthdayPeopleInMonth(currentMonth, currentYear, currentFilter, searchQuery);
-                const uniqueDays = getUniqueBirthdayDays(currentMonth, currentYear, currentFilter, searchQuery);
+                const count = countBirthdayPeopleInMonth(currentMonth, currentYear, currentFilter);
+                const uniqueDays = getUniqueBirthdayDays(currentMonth, currentYear, currentFilter);
 
-                monthLabel.innerHTML = `${monthNamesNom[currentMonth]} <span class="year">${currentYear}</span>`;
+                // Показываем только месяц, без года
+                monthLabel.textContent = monthNamesNom[currentMonth];
                 yearSelect.value = currentYear;
                 countEl.textContent = count;
                 birthdayWordEl.textContent = getBirthdayWord(count);
@@ -1155,11 +1044,6 @@
                     el.textContent = day;
                     el.setAttribute('role', 'gridcell');
 
-                    const key = `${String(day).padStart(2,'0')}.${String(currentMonth+1).padStart(2,'0')}`;
-                    const hasMom = !!momsMap[key];
-                    const hasKid = !!kidsMap[key];
-
-                    // Проверяем, есть ли именинники в этот день с учётом фильтра и поиска
                     const peopleOnDay = getBirthdayPeople(day, currentMonth + 1, currentYear);
                     let hasMatching = false;
                     
@@ -1171,16 +1055,6 @@
                         hasMatching = peopleOnDay.some(p => p.type === 'kid');
                     }
 
-                    // Поиск по имени
-                    if (searchQuery && hasMatching) {
-                        const searchLower = searchQuery.toLowerCase().trim();
-                        const matches = peopleOnDay.some(p => {
-                            const name = p.type === 'mom' ? p.name : p.baby;
-                            return name.toLowerCase().includes(searchLower);
-                        });
-                        hasMatching = matches;
-                    }
-
                     if (hasMatching) {
                         el.classList.add('birthday');
                         el.addEventListener('click', function(e) {
@@ -1188,7 +1062,6 @@
                             const people = getBirthdayPeople(day, currentMonth + 1, currentYear);
                             if (people.length) openModal(day, people);
                         });
-                        // Добавляем анимацию пульсации
                         setTimeout(() => {
                             el.classList.add('pulse');
                         }, 50);
@@ -1259,21 +1132,6 @@
             yearSelect.addEventListener('change', function() {
                 currentYear = parseInt(this.value);
                 render();
-            });
-
-            // ===== ПОИСК =====
-            searchInput.addEventListener('input', function() {
-                searchQuery = this.value;
-                clearSearch.classList.toggle('visible', searchQuery.length > 0);
-                render();
-            });
-
-            clearSearch.addEventListener('click', function() {
-                searchInput.value = '';
-                searchQuery = '';
-                clearSearch.classList.remove('visible');
-                render();
-                searchInput.focus();
             });
 
             // ===== ФИЛЬТРЫ =====
