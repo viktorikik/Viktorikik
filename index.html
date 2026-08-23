@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
     <title>🎉 Дни рождения</title>
 
-    <!-- ===== ПРЕВЬЮ ДЛЯ МЕССЕНДЖЕРОВ ===== -->
-    <meta property="og:title" content="🎉 Дни рождения участников чата"  />
-    <meta property="og:description" id="ogDescription" content="Следующий день рождения: 28 октября — Настя и Кирилл 🎉" />
+    <!-- ===== ПРЕВЬЮ ДЛЯ МЕССЕНДЖЕРОВ (СТАТИЧЕСКОЕ) ===== -->
+    <meta property="og:title" content="🎉 Календарь дней рождения" />
+    <meta property="og:description" content="Дни рождения мам и малышей из чата 🎂" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://viktorikik.github.io/Viktorikik/" />
     <meta property="og:image" content="https://emojicdn.elk.sh/🎉?size=512" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="🎉 Дни рождения участников чата " />
-    <meta name="twitter:description" id="twitterDescription" content="Следующий день рождения: 28 октября — Настя и Кирилл 🎉" />
+    <meta name="twitter:title" content="🎉 Календарь дней рождения" />
+    <meta name="twitter:description" content="Дни рождения мам и малышей из чата 🎂" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
     <style>
-        /* ===== ВЕСЬ CSS (БЕЗ ИЗМЕНЕНИЙ) ===== */
+        /* ===== ВЕСЬ CSS ===== */
         * {
             margin: 0;
             padding: 0;
@@ -56,7 +56,6 @@
             margin-top: 10px;
         }
 
-        /* ===== ЗАГОЛОВОК ===== */
         .calendar-header {
             text-align: center;
             margin-bottom: 14px;
@@ -93,7 +92,6 @@
             margin: 0 4px;
         }
 
-        /* ===== ФИЛЬТРЫ ===== */
         .controls {
             display: flex;
             flex-direction: column;
@@ -150,7 +148,6 @@
             color: #1e4a3a;
         }
 
-        /* ===== НАВИГАЦИЯ ===== */
         .month-selector {
             display: flex;
             align-items: center;
@@ -235,7 +232,6 @@
             white-space: nowrap;
         }
 
-        /* ===== ДНИ НЕДЕЛИ ===== */
         .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -248,7 +244,6 @@
             text-transform: uppercase;
         }
 
-        /* ===== СЕТКА КАЛЕНДАРЯ ===== */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -289,7 +284,6 @@
             }
         }
 
-        /* ===== ДЕНЬ С ИМЕНИННИКОМ ===== */
         .day.birthday {
             background: linear-gradient(135deg, #f7e0cc, #f5d4ba);
             color: #5a3f2e;
@@ -340,7 +334,6 @@
             font-weight: 500;
         }
 
-        /* ===== СУММАРИЙ ===== */
         .summary {
             margin-top: 16px;
             background: rgba(255, 250, 245, 0.4);
@@ -371,7 +364,6 @@
             font-weight: 400;
         }
 
-        /* ===== МОДАЛКА ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -545,7 +537,6 @@
             z-index: 5;
         }
 
-        /* ===== КОНФЕТТИ ===== */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -577,7 +568,6 @@
             }
         }
 
-        /* ===== АДАПТИВ ===== */
         @media (max-width: 380px) {
             .calendar-app {
                 padding: 16px 12px 16px;
@@ -642,7 +632,6 @@
             }
         }
 
-        /* ===== DARK MODE ===== */
         @media (prefers-color-scheme: dark) {
             body {
                 background: #1a1410;
@@ -1071,132 +1060,8 @@
                 return result.sort((a, b) => a.day - b.day);
             }
 
-            function getUniqueBirthdayDays(month, year, filter) {
-                const people = getBirthdayPeopleInMonth(month, year, filter);
-                const days = new Set();
-                people.forEach(p => days.add(p.day));
-                return Array.from(days).sort((a, b) => a - b);
-            }
-
             function countBirthdayPeopleInMonth(month, year, filter) {
                 return getBirthdayPeopleInMonth(month, year, filter).length;
-            }
-
-            // ===== ПОИСК СЛЕДУЮЩЕГО ДНЯ РОЖДЕНИЯ (ИСПРАВЛЕННЫЙ) =====
-            function getNextBirthday() {
-                const today = new Date();
-                const todayDate = today.getDate();
-                const todayMonth = today.getMonth() + 1; // 1-12
-                const todayYear = today.getFullYear();
-
-                // Собираем все дни рождения (мамы + малыши)
-                const allBirthdays = [];
-
-                // Добавляем мам
-                Object.keys(momsMap).forEach(key => {
-                    const [d, m] = key.split('.').map(Number);
-                    allBirthdays.push({
-                        day: d,
-                        month: m,
-                        name: momsMap[key][0].name,
-                        type: 'мама'
-                    });
-                });
-
-                // Добавляем малышей
-                Object.keys(kidsMap).forEach(key => {
-                    const [d, m] = key.split('.').map(Number);
-                    kidsMap[key].forEach(kid => {
-                        allBirthdays.push({
-                            day: d,
-                            month: m,
-                            name: kid.baby,
-                            type: 'малыш'
-                        });
-                    });
-                });
-
-                if (allBirthdays.length === 0) return null;
-
-                // Находим ближайший день рождения
-                let next = null;
-                let minDiff = Infinity;
-
-                allBirthdays.forEach(b => {
-                    // Определяем год, в котором будет этот день рождения
-                    let targetYear = todayYear;
-                    
-                    // Создаем дату дня рождения в этом году
-                    const birthdayThisYear = new Date(todayYear, b.month - 1, b.day);
-                    
-                    // Проверяем, прошел ли уже этот день рождения в этом году
-                    const isPast = birthdayThisYear < today;
-                    
-                    if (isPast) {
-                        // Если уже прошел — переносим на следующий год
-                        targetYear = todayYear + 1;
-                    }
-                    
-                    const targetDate = new Date(targetYear, b.month - 1, b.day);
-                    const diff = targetDate - today;
-                    
-                    // Ищем минимальную положительную разницу
-                    if (diff >= 0 && diff < minDiff) {
-                        minDiff = diff;
-                        next = b;
-                    }
-                });
-
-                // Если не нашли (все дни рождения уже прошли сегодня или раньше)
-                if (!next && allBirthdays.length > 0) {
-                    // Берем самый ранний день рождения в следующем году
-                    let earliest = null;
-                    let earliestDiff = Infinity;
-                    allBirthdays.forEach(b => {
-                        const targetDate = new Date(todayYear + 1, b.month - 1, b.day);
-                        const diff = targetDate - today;
-                        if (diff < earliestDiff) {
-                            earliestDiff = diff;
-                            earliest = b;
-                        }
-                    });
-                    next = earliest;
-                }
-
-                return next;
-            }
-
-            // ===== ОБНОВЛЕНИЕ ПРЕВЬЮ (УЛУЧШЕННЫЙ) =====
-            function updatePreview() {
-                const next = getNextBirthday();
-                if (next) {
-                    // Собираем всех именинников на этот день
-                    const allPeopleOnDay = getBirthdayPeople(next.day, next.month, new Date().getFullYear());
-                    
-                    let names = [];
-                    if (allPeopleOnDay.length > 0) {
-                        allPeopleOnDay.forEach(person => {
-                            if (person.type === 'mom') {
-                                names.push(person.name);
-                            } else if (person.type === 'kid') {
-                                names.push(person.baby);
-                            }
-                        });
-                    }
-                    
-                    // Если по какой-то причине массив пуст, используем имя из next
-                    if (names.length === 0 && next.name) {
-                        names.push(next.name);
-                    }
-                    
-                    const monthName = monthNamesNom[next.month - 1];
-                    let description = `Следующий день рождения: ${next.day} ${monthName} — ${names.join(' и ')} 🎉`;
-                    
-                    const ogDesc = document.getElementById('ogDescription');
-                    const twitterDesc = document.getElementById('twitterDescription');
-                    if (ogDesc) ogDesc.content = description;
-                    if (twitterDesc) twitterDesc.content = description;
-                }
             }
 
             // ===== РЕНДЕР =====
@@ -1266,8 +1131,6 @@
 
                     grid.appendChild(el);
                 }
-
-                updatePreview();
             }
 
             // ===== МОДАЛКА =====
