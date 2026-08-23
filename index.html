@@ -5,20 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
     <title>🎉 Дни рождения</title>
     
-    <!-- Open Graph для красивого превью -->
-    <meta property="og:title" content="🎉 Дни рождения мам и малышей" />
-    <meta property="og:description" content="Календарь дней рождения с красивым дизайном. Мамы и малыши — все в одном месте!" />
+    <!-- ===== УЛУЧШЕННОЕ ПРЕВЬЮ ДЛЯ МЕССЕНДЖЕРОВ ===== -->
+    <!-- Базовые мета-теги -->
+    <meta property="og:title" content="🎉 Дни рождения участников чата «Клуб разбитых коленок»" />
+    <meta property="og:description" id="ogDescription" content="Следующий день рождения: 28 октября — Настя и Кирилл 🎉" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://твой-ник.github.io/birthday-calendar/" />
     <meta property="og:image" content="https://emojicdn.elk.sh/🎉?size=512" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="🎉 Дни рождения мам и малышей" />
-    <meta name="twitter:description" content="Красивый календарь с днями рождения" />
+    <meta name="twitter:title" content="🎉 Дни рождения участников чата «Клуб разбитых коленок»" />
+    <meta name="twitter:description" id="twitterDescription" content="Следующий день рождения: 28 октября — Настя и Кирилл 🎉" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
+        /* ===== ВЕСЬ CSS (без изменений, тот же что был) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -88,7 +90,7 @@
             margin-top: 2px;
         }
 
-        /* ===== ФИЛЬТРЫ (только кнопки, поиск убран) ===== */
+        /* ===== ФИЛЬТРЫ ===== */
         .controls {
             display: flex;
             flex-direction: column;
@@ -410,6 +412,8 @@
             max-height: 90dvh;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            position: relative;
+            overflow: hidden;
         }
 
         @keyframes modalPop {
@@ -432,6 +436,8 @@
             justify-content: center;
             border-radius: 50%;
             touch-action: manipulation;
+            position: relative;
+            z-index: 10;
         }
 
         .modal-close:active {
@@ -457,6 +463,8 @@
             letter-spacing: 0.5px;
             clear: both;
             padding-top: 4px;
+            position: relative;
+            z-index: 5;
         }
 
         .modal-date .month-name {
@@ -473,6 +481,8 @@
             animation: entrySlide 0.4s ease forwards;
             opacity: 0;
             transform: translateX(-20px);
+            position: relative;
+            z-index: 5;
         }
 
         .birthday-entry:nth-child(1) { animation-delay: 0.05s; }
@@ -528,6 +538,40 @@
             margin: 8px 0;
             font-size: clamp(10px, 2.5vw, 12px);
             letter-spacing: 2px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ===== КОНФЕТТИ ===== */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            opacity: 0.8;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
         }
 
         /* ===== АДАПТИВ ===== */
@@ -744,7 +788,6 @@
             </div>
         </div>
 
-        <!-- ===== ТОЛЬКО ФИЛЬТРЫ (ПОИСК УБРАН) ===== -->
         <div class="controls">
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">👥 Все</button>
@@ -753,7 +796,6 @@
             </div>
         </div>
 
-        <!-- ===== НАВИГАЦИЯ ===== -->
         <div class="month-selector">
             <button class="nav-btn" id="prevMonth" aria-label="Предыдущий месяц">‹</button>
             <div class="year-nav">
@@ -780,7 +822,6 @@
         </div>
     </div>
 
-    <!-- ===== МОДАЛКА ===== -->
     <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
         <div class="modal-card">
             <button class="modal-close" id="closeModalBtn" aria-label="Закрыть">✕</button>
@@ -791,8 +832,39 @@
         </div>
     </div>
 
+    <!-- Контейнер для конфетти -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
     <script>
         (function(){
+            // ===== КОНФЕТТИ =====
+            function launchConfetti() {
+                const container = document.getElementById('confettiContainer');
+                const colors = ['#d4875e', '#e8a87c', '#f7d4ba', '#f5c4ba', '#6eb894', '#b8a898', '#f7e0cc', '#d4c4b4'];
+                const shapes = ['■', '●', '▲', '★', '✦', '♥'];
+                
+                // Очищаем старые конфетти
+                container.innerHTML = '';
+                
+                for (let i = 0; i < 80; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'confetti-piece';
+                    piece.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                    piece.style.left = Math.random() * 100 + '%';
+                    piece.style.color = colors[Math.floor(Math.random() * colors.length)];
+                    piece.style.fontSize = (Math.random() * 16 + 8) + 'px';
+                    piece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    piece.style.animationDelay = (Math.random() * 2) + 's';
+                    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    container.appendChild(piece);
+                }
+                
+                // Убираем конфетти через 5 секунд
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 5000);
+            }
+
             // ===== СКЛОНЕНИЯ =====
             function getBirthdayWord(count) {
                 const last = count % 10;
@@ -869,6 +941,10 @@
             const birthdayWordEl = document.getElementById('birthdayWord');
             const yearSelect = document.getElementById('yearSelect');
             const filterBtns = document.querySelectorAll('.filter-btn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalDate = document.getElementById('modalDate');
+            const modalNames = document.getElementById('modalNames');
+            const closeBtn = document.getElementById('closeModalBtn');
 
             let currentFilter = 'all';
 
@@ -1007,6 +1083,69 @@
                 return getBirthdayPeopleInMonth(month, year, filter).length;
             }
 
+            // ===== ПОИСК СЛЕДУЮЩЕГО ДНЯ РОЖДЕНИЯ =====
+            function getNextBirthday() {
+                const today = new Date();
+                const todayDate = today.getDate();
+                const todayMonth = today.getMonth() + 1; // 1-12
+                const todayYear = today.getFullYear();
+
+                // Собираем все дни рождения (мамы + малыши)
+                const allBirthdays = [];
+
+                Object.keys(momsMap).forEach(key => {
+                    const [d, m] = key.split('.').map(Number);
+                    allBirthdays.push({ day: d, month: m, name: momsMap[key][0].name });
+                });
+
+                Object.keys(kidsMap).forEach(key => {
+                    const [d, m] = key.split('.').map(Number);
+                    kidsMap[key].forEach(kid => {
+                        allBirthdays.push({ day: d, month: m, name: kid.baby });
+                    });
+                });
+
+                // Ищем ближайший день рождения
+                let next = null;
+                let minDiff = Infinity;
+
+                allBirthdays.forEach(b => {
+                    let targetYear = todayYear;
+                    // Если день рождения уже прошёл в этом году — переносим на следующий
+                    if (b.month < todayMonth || (b.month === todayMonth && b.day < todayDate)) {
+                        targetYear++;
+                    }
+                    const targetDate = new Date(targetYear, b.month - 1, b.day);
+                    const diff = targetDate - today;
+                    if (diff > 0 && diff < minDiff) {
+                        minDiff = diff;
+                        next = b;
+                    }
+                });
+
+                // Если не нашли (маловероятно) — берём первый попавшийся
+                if (!next && allBirthdays.length > 0) {
+                    next = allBirthdays[0];
+                }
+
+                return next;
+            }
+
+            // ===== ОБНОВЛЕНИЕ ПРЕВЬЮ =====
+            function updatePreview() {
+                const next = getNextBirthday();
+                if (next) {
+                    const monthName = monthNamesNom[next.month - 1];
+                    const description = `Следующий день рождения: ${next.day} ${monthName} — ${next.name} 🎉`;
+                    
+                    // Обновляем мета-теги
+                    const ogDesc = document.getElementById('ogDescription');
+                    const twitterDesc = document.getElementById('twitterDescription');
+                    if (ogDesc) ogDesc.content = description;
+                    if (twitterDesc) twitterDesc.content = description;
+                }
+            }
+
             // ===== РЕНДЕР =====
             function render() {
                 const first = new Date(currentYear, currentMonth, 1);
@@ -1016,9 +1155,7 @@
                 start = start === 0 ? 6 : start - 1;
 
                 const count = countBirthdayPeopleInMonth(currentMonth, currentYear, currentFilter);
-                const uniqueDays = getUniqueBirthdayDays(currentMonth, currentYear, currentFilter);
 
-                // Показываем только месяц, без года
                 monthLabel.textContent = monthNamesNom[currentMonth];
                 yearSelect.value = currentYear;
                 countEl.textContent = count;
@@ -1060,7 +1197,10 @@
                         el.addEventListener('click', function(e) {
                             e.stopPropagation();
                             const people = getBirthdayPeople(day, currentMonth + 1, currentYear);
-                            if (people.length) openModal(day, people);
+                            if (people.length) {
+                                openModal(day, people);
+                                launchConfetti();
+                            }
                         });
                         setTimeout(() => {
                             el.classList.add('pulse');
@@ -1073,14 +1213,12 @@
 
                     grid.appendChild(el);
                 }
+
+                // Обновляем превью при смене месяца/года
+                updatePreview();
             }
 
             // ===== МОДАЛКА =====
-            const modalOverlay = document.getElementById('modalOverlay');
-            const modalDate = document.getElementById('modalDate');
-            const modalNames = document.getElementById('modalNames');
-            const closeBtn = document.getElementById('closeModalBtn');
-
             function openModal(day, people) {
                 modalDate.innerHTML = `${day} <span class="month-name">${monthNames[currentMonth]}</span>`;
 
@@ -1109,6 +1247,9 @@
                 modalNames.innerHTML = html;
                 modalOverlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                
+                // Запускаем конфетти
+                launchConfetti();
             }
 
             function closeModalFn() {
@@ -1134,7 +1275,6 @@
                 render();
             });
 
-            // ===== ФИЛЬТРЫ =====
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     filterBtns.forEach(b => b.classList.remove('active'));
@@ -1142,6 +1282,15 @@
                     currentFilter = this.dataset.filter;
                     render();
                 });
+            });
+
+            closeBtn.addEventListener('click', closeModalFn);
+            modalOverlay.addEventListener('click', e => {
+                if (e.target === modalOverlay) closeModalFn();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModalFn();
             });
 
             // ===== СВАЙПЫ =====
@@ -1168,16 +1317,6 @@
                     }
                 }
             }, { passive: true });
-
-            // ===== ЗАКРЫТИЕ МОДАЛКИ =====
-            closeBtn.addEventListener('click', closeModalFn);
-            modalOverlay.addEventListener('click', e => {
-                if (e.target === modalOverlay) closeModalFn();
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') closeModalFn();
-            });
 
             // ===== ЗАПУСК =====
             render();
