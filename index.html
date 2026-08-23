@@ -155,6 +155,7 @@
             gap: clamp(10px, 2vw, 16px);
             margin-bottom: 16px;
             touch-action: manipulation;
+            flex-wrap: wrap;
         }
 
         .month-selector .year-nav {
@@ -218,6 +219,34 @@
                 background: rgba(255, 250, 245, 0.8);
                 color: #7a5a42;
                 border-color: rgba(200, 160, 130, 0.4);
+            }
+        }
+
+        .today-btn {
+            background: linear-gradient(135deg, #d4875e, #c47a54);
+            border: none;
+            border-radius: 40px;
+            padding: 4px 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(12px, 2.8vw, 14px);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            touch-action: manipulation;
+            white-space: nowrap;
+            box-shadow: 0 2px 12px rgba(212, 135, 94, 0.2);
+        }
+
+        .today-btn:active {
+            transform: scale(0.92);
+        }
+
+        @media (hover: hover) {
+            .today-btn:hover {
+                background: linear-gradient(135deg, #c47a54, #b06a48);
+                box-shadow: 0 4px 20px rgba(212, 135, 94, 0.3);
+                transform: translateY(-1px);
             }
         }
 
@@ -334,8 +363,39 @@
             font-weight: 500;
         }
 
+        .today-info {
+            margin-top: 10px;
+            background: linear-gradient(135deg, rgba(212, 135, 94, 0.12), rgba(212, 135, 94, 0.05));
+            border-radius: 60px;
+            padding: clamp(10px, 2.5vw, 14px) clamp(14px, 3vw, 20px);
+            text-align: center;
+            font-size: clamp(13px, 3vw, 15px);
+            font-weight: 400;
+            color: #5a3f2e;
+            border: 1px solid rgba(212, 135, 94, 0.15);
+            letter-spacing: 0.2px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+
+        .today-info .highlight {
+            color: #d4875e;
+            font-weight: 600;
+        }
+
+        .today-info .empty {
+            color: #b0957e;
+            font-weight: 300;
+        }
+
         .stats {
-            margin-top: 16px;
+            margin-top: 10px;
             background: rgba(255, 250, 245, 0.4);
             border-radius: 60px;
             padding: clamp(10px, 2.5vw, 14px) clamp(14px, 3vw, 20px);
@@ -619,16 +679,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        .icon-pulse {
-            display: inline-block;
-            animation: iconPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-        }
-
         @media (max-width: 380px) {
             .calendar-app {
                 padding: 16px 12px 16px;
@@ -666,6 +716,14 @@
             .filter-btn {
                 font-size: 10px;
                 padding: 4px 12px;
+            }
+            .today-btn {
+                font-size: 11px;
+                padding: 3px 12px;
+            }
+            .today-info {
+                font-size: 12px;
+                padding: 8px 12px;
             }
         }
 
@@ -740,6 +798,28 @@
                 border-color: #e8a87c;
                 background: rgba(255, 250, 245, 0.08);
                 color: #f5ede8;
+            }
+            .today-btn {
+                background: linear-gradient(135deg, #e8a87c, #d4875e);
+            }
+            .today-btn:active {
+                background: linear-gradient(135deg, #d4875e, #c47a54);
+            }
+            @media (hover: hover) {
+                .today-btn:hover {
+                    background: linear-gradient(135deg, #d4875e, #c47a54);
+                }
+            }
+            .today-info {
+                background: rgba(212, 135, 94, 0.08);
+                border-color: rgba(212, 135, 94, 0.1);
+                color: #f0e4d8;
+            }
+            .today-info .highlight {
+                color: #e8a87c;
+            }
+            .today-info .empty {
+                color: #8a7a6a;
             }
             .stats {
                 color: #8a7a6a;
@@ -871,6 +951,7 @@
                 <select id="yearSelect"></select>
             </div>
             <button class="nav-btn" id="nextMonth" aria-label="Следующий месяц">›</button>
+            <button class="today-btn" id="todayBtn">📅 Сегодня</button>
         </div>
 
         <div class="weekdays" role="row">
@@ -884,6 +965,8 @@
         </div>
 
         <div class="calendar-grid" id="calendarGrid" role="grid"></div>
+
+        <div class="today-info" id="todayInfo"></div>
 
         <div class="summary" id="summary">
             🎂 В этом месяце <strong id="birthdayCount">0</strong> <span class="word" id="birthdayWord">именинников</span>
@@ -935,15 +1018,6 @@
                 if (last === 1) return 'именинник';
                 if (last >= 2 && last <= 4) return 'именинника';
                 return 'именинников';
-            }
-
-            function getMonthWord(count) {
-                const last = count % 10;
-                const lastTwo = count % 100;
-                if (lastTwo >= 11 && lastTwo <= 19) return 'месяцев';
-                if (last === 1) return 'месяц';
-                if (last >= 2 && last <= 4) return 'месяца';
-                return 'месяцев';
             }
 
             // ===== ДАННЫЕ =====
@@ -1018,6 +1092,8 @@
             const modalNames = document.getElementById('modalNames');
             const closeBtn = document.getElementById('closeModalBtn');
             const statsEl = document.getElementById('stats');
+            const todayBtn = document.getElementById('todayBtn');
+            const todayInfoEl = document.getElementById('todayInfo');
 
             let currentFilter = 'all';
 
@@ -1076,7 +1152,6 @@
                 const key = `${String(day).padStart(2,'0')}.${String(month).padStart(2,'0')}`;
                 const result = [];
 
-                // Мамы всегда есть
                 if (momsMap[key]) {
                     momsMap[key].forEach(m => {
                         result.push({
@@ -1089,10 +1164,8 @@
                     });
                 }
 
-                // Дети только если родились
                 if (kidsMap[key]) {
                     kidsMap[key].forEach(k => {
-                        // Проверяем, родился ли ребенок уже в этом году
                         if (year >= k.birthYear) {
                             const age = getAge(k.birthYear, month, day, year, month, day);
                             result.push({
@@ -1114,7 +1187,6 @@
             function getBirthdayPeopleInMonth(month, year, filter) {
                 const result = [];
 
-                // Мамы
                 Object.keys(momsMap).forEach(key => {
                     const [d, m] = key.split('.').map(Number);
                     if (m === month + 1) {
@@ -1131,12 +1203,10 @@
                     }
                 });
 
-                // Дети (только если родились)
                 Object.keys(kidsMap).forEach(key => {
                     const [d, m] = key.split('.').map(Number);
                     if (m === month + 1) {
                         kidsMap[key].forEach(kid => {
-                            // Проверяем, родился ли ребенок уже в этом году
                             if (year >= kid.birthYear) {
                                 if (filter === 'all' || filter === 'kids') {
                                     const age = getAge(kid.birthYear, m, d, year, m, d);
@@ -1163,12 +1233,8 @@
                 return getBirthdayPeopleInMonth(month, year, filter).length;
             }
 
-            // ===== СТАТИСТИКА =====
-            function calculateStats() {
-                const today = new Date();
-                const currentYear = today.getFullYear();
-                
-                // Собираем всех именинников в текущем году
+            // ===== СТАТИСТИКА ЗА ГОД =====
+            function calculateYearStats(year) {
                 let allBirthdays = [];
                 
                 // Мамы (всегда есть)
@@ -1182,11 +1248,11 @@
                     });
                 });
                 
-                // Дети (только если родились)
+                // Дети (только если родились в этом году или раньше)
                 Object.keys(kidsMap).forEach(key => {
                     const [day, month] = key.split('.').map(Number);
                     kidsMap[key].forEach(kid => {
-                        if (currentYear >= kid.birthYear) {
+                        if (year >= kid.birthYear) {
                             allBirthdays.push({
                                 day: day,
                                 month: month,
@@ -1205,7 +1271,6 @@
                     monthStats[b.month]++;
                 });
 
-                // Находим самый популярный месяц
                 let maxCount = 0;
                 let popularMonth = 0;
                 Object.keys(monthStats).forEach(month => {
@@ -1215,26 +1280,75 @@
                     }
                 });
 
-                const total = allBirthdays.length;
-
                 return {
-                    total: total,
+                    total: allBirthdays.length,
                     popularMonth: popularMonth,
                     popularMonthCount: maxCount
                 };
             }
 
+            // ===== СЕГОДНЯШНИЕ ИМЕНИННИКИ =====
+            function getTodayBirthdays() {
+                const today = new Date();
+                const day = today.getDate();
+                const month = today.getMonth() + 1;
+                const year = today.getFullYear();
+                
+                const people = getBirthdayPeople(day, month, year);
+                
+                // Фильтруем по текущему фильтру
+                let filtered = people;
+                if (currentFilter === 'moms') {
+                    filtered = people.filter(p => p.type === 'mom');
+                } else if (currentFilter === 'kids') {
+                    filtered = people.filter(p => p.type === 'kid');
+                }
+                
+                return filtered;
+            }
+
+            // ===== ОБНОВЛЕНИЕ ИНФОРМАЦИИ О СЕГОДНЯШНИХ ИМЕНИННИКАХ =====
+            function updateTodayInfo() {
+                const todayBirthdays = getTodayBirthdays();
+                
+                if (todayBirthdays.length === 0) {
+                    todayInfoEl.innerHTML = `<span class="empty">😴 Сегодня именинников нет</span>`;
+                    return;
+                }
+
+                const names = todayBirthdays.map(p => {
+                    if (p.type === 'mom') return p.name;
+                    else return p.baby;
+                });
+
+                let text = '';
+                if (todayBirthdays.length === 1) {
+                    const person = todayBirthdays[0];
+                    if (person.type === 'mom') {
+                        text = `🎉 Сегодня день рождения у <span class="highlight">${person.name}</span>!`;
+                    } else {
+                        const emoji = getGenderEmoji(person.gender);
+                        text = `🎉 Сегодня день рождения у ${emoji} <span class="highlight">${person.baby}</span>!`;
+                    }
+                } else {
+                    const namesList = names.join(', ');
+                    text = `🎉 Сегодня день рождения у ${todayBirthdays.length} человек: <span class="highlight">${namesList}</span>`;
+                }
+                
+                todayInfoEl.innerHTML = text;
+            }
+
             // ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
             function updateStats() {
-                const stats = calculateStats();
+                const stats = calculateYearStats(currentYear);
                 if (stats.total === 0) {
-                    statsEl.textContent = '📊 Статистика пока недоступна';
+                    statsEl.textContent = '📊 В этом году пока нет именинников';
                     return;
                 }
 
                 const monthName = monthNamesNom[stats.popularMonth - 1];
                 statsEl.innerHTML = `
-                    📊 В этом году <strong>${stats.total}</strong> ${getBirthdayWord(stats.total)} 
+                    📊 В ${currentYear} году <strong>${stats.total}</strong> ${getBirthdayWord(stats.total)} 
                     · Самый популярный месяц — <strong>${monthName}</strong> (${stats.popularMonthCount} ${getBirthdayWord(stats.popularMonthCount)})
                 `;
             }
@@ -1307,6 +1421,7 @@
                     grid.appendChild(el);
                 }
 
+                updateTodayInfo();
                 updateStats();
             }
 
@@ -1364,6 +1479,17 @@
             yearSelect.addEventListener('change', function() {
                 currentYear = parseInt(this.value);
                 render();
+            });
+
+            todayBtn.addEventListener('click', function() {
+                const today = new Date();
+                currentMonth = today.getMonth();
+                currentYear = today.getFullYear();
+                render();
+                this.style.transform = 'scale(0.92)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
             });
 
             filterBtns.forEach(btn => {
