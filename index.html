@@ -7,13 +7,13 @@
 
     <!-- ===== ПРЕВЬЮ ДЛЯ МЕССЕНДЖЕРОВ (СТАТИЧЕСКОЕ) ===== -->
     <meta property="og:title" content="🎉 Календарь дней рождения" />
-    <meta property="og:description" content="Дни рождения мам и малышей из чата «Клуб разбитых коленок» 🎂" />
+    <meta property="og:description" content="Дни рождения мам и малышей 🎂" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://viktorikik.github.io/Viktorikik/" />
     <meta property="og:image" content="https://emojicdn.elk.sh/🎉?size=512" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="🎉 Календарь дней рождения" />
-    <meta name="twitter:description" content="Дни рождения мам и малышей из чата «Клуб разбитых коленок» 🎂" />
+    <meta name="twitter:description" content="Дни рождения мам и малышей 🎂" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -334,7 +334,6 @@
             font-weight: 500;
         }
 
-        /* ===== СТАТИСТИКА ===== */
         .stats {
             margin-top: 16px;
             background: rgba(255, 250, 245, 0.4);
@@ -600,7 +599,6 @@
             }
         }
 
-        /* ===== АНИМАЦИИ ДЛЯ ИКОНОК ===== */
         .icon-bounce {
             display: inline-block;
             animation: bounce 2s ease-in-out infinite;
@@ -852,7 +850,7 @@
 <body>
     <div class="calendar-app" role="main">
         <div class="calendar-header">
-            <h1>✨ Дни рождения участников чата<br>«Клуб разбитых коленок»</h1>
+            <h1>✨ Дни рождения участников чата</h1>
             <div class="subtitle">
                 <span class="icon-bounce">👩</span> мамы <span>·</span> <span class="icon-spin">🎈</span> малыши
             </div>
@@ -1078,6 +1076,7 @@
                 const key = `${String(day).padStart(2,'0')}.${String(month).padStart(2,'0')}`;
                 const result = [];
 
+                // Мамы всегда есть
                 if (momsMap[key]) {
                     momsMap[key].forEach(m => {
                         result.push({
@@ -1090,18 +1089,22 @@
                     });
                 }
 
+                // Дети только если родились
                 if (kidsMap[key]) {
                     kidsMap[key].forEach(k => {
-                        const age = getAge(k.birthYear, month, day, year, month, day);
-                        result.push({
-                            type: 'kid',
-                            mom: k.mom,
-                            momGen: k.momGen,
-                            baby: k.baby,
-                            babyGen: k.babyGen,
-                            age: age,
-                            gender: k.gender || 'male'
-                        });
+                        // Проверяем, родился ли ребенок уже в этом году
+                        if (year >= k.birthYear) {
+                            const age = getAge(k.birthYear, month, day, year, month, day);
+                            result.push({
+                                type: 'kid',
+                                mom: k.mom,
+                                momGen: k.momGen,
+                                baby: k.baby,
+                                babyGen: k.babyGen,
+                                age: age,
+                                gender: k.gender || 'male'
+                            });
+                        }
                     });
                 }
 
@@ -1111,6 +1114,7 @@
             function getBirthdayPeopleInMonth(month, year, filter) {
                 const result = [];
 
+                // Мамы
                 Object.keys(momsMap).forEach(key => {
                     const [d, m] = key.split('.').map(Number);
                     if (m === month + 1) {
@@ -1127,22 +1131,26 @@
                     }
                 });
 
+                // Дети (только если родились)
                 Object.keys(kidsMap).forEach(key => {
                     const [d, m] = key.split('.').map(Number);
                     if (m === month + 1) {
                         kidsMap[key].forEach(kid => {
-                            if (filter === 'all' || filter === 'kids') {
-                                const age = getAge(kid.birthYear, m, d, year, m, d);
-                                result.push({
-                                    type: 'kid',
-                                    day: d,
-                                    mom: kid.mom,
-                                    momGen: kid.momGen,
-                                    baby: kid.baby,
-                                    babyGen: kid.babyGen,
-                                    age: age,
-                                    gender: kid.gender || 'male'
-                                });
+                            // Проверяем, родился ли ребенок уже в этом году
+                            if (year >= kid.birthYear) {
+                                if (filter === 'all' || filter === 'kids') {
+                                    const age = getAge(kid.birthYear, m, d, year, m, d);
+                                    result.push({
+                                        type: 'kid',
+                                        day: d,
+                                        mom: kid.mom,
+                                        momGen: kid.momGen,
+                                        baby: kid.baby,
+                                        babyGen: kid.babyGen,
+                                        age: age,
+                                        gender: kid.gender || 'male'
+                                    });
+                                }
                             }
                         });
                     }
@@ -1163,7 +1171,7 @@
                 // Собираем всех именинников в текущем году
                 let allBirthdays = [];
                 
-                // Мамы
+                // Мамы (всегда есть)
                 Object.keys(momsMap).forEach(key => {
                     const [day, month] = key.split('.').map(Number);
                     allBirthdays.push({
@@ -1174,17 +1182,19 @@
                     });
                 });
                 
-                // Дети
+                // Дети (только если родились)
                 Object.keys(kidsMap).forEach(key => {
                     const [day, month] = key.split('.').map(Number);
                     kidsMap[key].forEach(kid => {
-                        allBirthdays.push({
-                            day: day,
-                            month: month,
-                            type: 'kid',
-                            name: kid.baby,
-                            gender: kid.gender || 'male'
-                        });
+                        if (currentYear >= kid.birthYear) {
+                            allBirthdays.push({
+                                day: day,
+                                month: month,
+                                type: 'kid',
+                                name: kid.baby,
+                                gender: kid.gender || 'male'
+                            });
+                        }
                     });
                 });
 
@@ -1205,7 +1215,6 @@
                     }
                 });
 
-                // Количество именинников в этом году (учитываем только тех, у кого день рождения уже прошел или еще будет)
                 const total = allBirthdays.length;
 
                 return {
