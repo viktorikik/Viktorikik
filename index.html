@@ -207,6 +207,25 @@
             background: linear-gradient(135deg, #d4875e, #c47a54) !important;
         }
 
+        body.light-theme .theme-notification {
+            background: rgba(255, 215, 0, 0.08) !important;
+            border-color: rgba(255, 215, 0, 0.15) !important;
+            color: #b0957e !important;
+        }
+
+        body.light-theme .theme-notification .theme-message {
+            color: #8a7a6a !important;
+        }
+
+        body.light-theme .theme-notification .theme-message strong {
+            color: #d4875e !important;
+        }
+
+        body.light-theme .theme-notification .theme-btn {
+            background: linear-gradient(135deg, #d4875e, #c47a54) !important;
+            color: #fff !important;
+        }
+
         .calendar-app {
             max-width: 560px;
             width: 100%;
@@ -654,7 +673,7 @@
             font-weight: 400;
         }
 
-        /* ===== УВЕДОМЛЕНИЕ О ТЕМНОЙ ТЕМЕ ===== */
+        /* ===== УВЕДОМЛЕНИЕ О ТЕМЕ ===== */
         .theme-notification {
             margin-top: 10px;
             background: rgba(255, 215, 0, 0.08);
@@ -1106,12 +1125,16 @@
                 color: #e8a87c;
             }
             body:not(.light-theme) .theme-notification .theme-btn {
-                background: linear-gradient(135deg, #e8a87c, #d4875e);
-                color: #f5ede8;
+                background: linear-gradient(135deg, #ffd700, #f0c800);
+                color: #3d2c1e;
+            }
+            body:not(.light-theme) .theme-notification .theme-btn.dark {
+                background: linear-gradient(135deg, #e8a87c, #d4875e) !important;
+                color: #f5ede8 !important;
             }
             @media (hover: hover) {
-                body:not(.light-theme) .theme-notification .theme-btn:hover {
-                    background: linear-gradient(135deg, #d4875e, #c47a54);
+                body:not(.light-theme) .theme-notification .theme-btn.dark:hover {
+                    background: linear-gradient(135deg, #d4875e, #c47a54) !important;
                 }
             }
             body:not(.light-theme) .stats {
@@ -1268,8 +1291,8 @@
         <div class="stats" id="stats"></div>
 
         <div class="theme-notification" id="themeNotification" style="display: none;">
-            <span class="theme-message">🌙 Включена темная тема в соответствии с настройками твоего телефона!</span>
-            <button class="theme-btn" id="lightThemeBtn">☀️ Вернуть светлую тему</button>
+            <span class="theme-message" id="themeMessage">🌙 Включена темная тема в соответствии с настройками твоего телефона!</span>
+            <button class="theme-btn" id="themeToggleBtn">☀️ Вернуть светлую тему</button>
         </div>
     </div>
 
@@ -1393,10 +1416,12 @@
             const todayBtn = document.getElementById('todayBtn');
             const todayInfoEl = document.getElementById('todayInfo');
             const themeNotification = document.getElementById('themeNotification');
-            const lightThemeBtn = document.getElementById('lightThemeBtn');
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeMessage = document.getElementById('themeMessage');
 
             let currentFilter = 'all';
             let isDarkTheme = false;
+            let isManualTheme = false;
 
             // ===== ПРОВЕРКА ТЕМНОЙ ТЕМЫ =====
             function checkDarkTheme() {
@@ -1405,49 +1430,88 @@
                 
                 if (savedTheme === 'light') {
                     document.body.classList.add('light-theme');
-                    themeNotification.style.display = 'none';
+                    themeNotification.style.display = 'flex';
+                    themeMessage.textContent = '☀️ Включена светлая тема';
+                    themeToggleBtn.textContent = '🌙 Вернуть темную тему';
+                    themeToggleBtn.classList.add('dark');
                     isDarkTheme = false;
+                    isManualTheme = true;
+                    return;
+                }
+                
+                if (savedTheme === 'dark') {
+                    document.body.classList.remove('light-theme');
+                    themeNotification.style.display = 'flex';
+                    themeMessage.textContent = '🌙 Включена темная тема';
+                    themeToggleBtn.textContent = '☀️ Вернуть светлую тему';
+                    themeToggleBtn.classList.remove('dark');
+                    isDarkTheme = true;
+                    isManualTheme = true;
                     return;
                 }
                 
                 if (prefersDark) {
                     document.body.classList.remove('light-theme');
                     themeNotification.style.display = 'flex';
+                    themeMessage.textContent = '🌙 Включена темная тема в соответствии с настройками твоего телефона!';
+                    themeToggleBtn.textContent = '☀️ Вернуть светлую тему';
+                    themeToggleBtn.classList.remove('dark');
                     isDarkTheme = true;
+                    isManualTheme = false;
                 } else {
                     document.body.classList.add('light-theme');
                     themeNotification.style.display = 'none';
                     isDarkTheme = false;
+                    isManualTheme = false;
                 }
             }
 
-            // ===== ПЕРЕКЛЮЧЕНИЕ НА СВЕТЛУЮ ТЕМУ =====
-            function switchToLightTheme() {
-                document.body.classList.add('light-theme');
-                themeNotification.style.display = 'none';
-                isDarkTheme = false;
-                localStorage.setItem('calendarTheme', 'light');
+            // ===== ПЕРЕКЛЮЧЕНИЕ ТЕМЫ =====
+            function toggleTheme() {
+                if (isDarkTheme) {
+                    // Переключаем на светлую
+                    document.body.classList.add('light-theme');
+                    themeMessage.textContent = '☀️ Включена светлая тема';
+                    themeToggleBtn.textContent = '🌙 Вернуть темную тему';
+                    themeToggleBtn.classList.add('dark');
+                    isDarkTheme = false;
+                    isManualTheme = true;
+                    localStorage.setItem('calendarTheme', 'light');
+                } else {
+                    // Переключаем на темную
+                    document.body.classList.remove('light-theme');
+                    themeMessage.textContent = '🌙 Включена темная тема';
+                    themeToggleBtn.textContent = '☀️ Вернуть светлую тему';
+                    themeToggleBtn.classList.remove('dark');
+                    isDarkTheme = true;
+                    isManualTheme = true;
+                    localStorage.setItem('calendarTheme', 'dark');
+                }
             }
 
             // ===== СЛУШАЕМ ИЗМЕНЕНИЕ СИСТЕМНОЙ ТЕМЫ =====
             const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
             darkModeMediaQuery.addEventListener('change', (e) => {
                 const savedTheme = localStorage.getItem('calendarTheme');
-                if (savedTheme === 'light') {
-                    document.body.classList.add('light-theme');
-                    themeNotification.style.display = 'none';
-                    isDarkTheme = false;
+                
+                if (savedTheme === 'light' || savedTheme === 'dark') {
+                    // Если пользователь уже выбрал тему вручную, не меняем
                     return;
                 }
                 
                 if (e.matches) {
                     document.body.classList.remove('light-theme');
                     themeNotification.style.display = 'flex';
+                    themeMessage.textContent = '🌙 Включена темная тема в соответствии с настройками твоего телефона!';
+                    themeToggleBtn.textContent = '☀️ Вернуть светлую тему';
+                    themeToggleBtn.classList.remove('dark');
                     isDarkTheme = true;
+                    isManualTheme = false;
                 } else {
                     document.body.classList.add('light-theme');
                     themeNotification.style.display = 'none';
                     isDarkTheme = false;
+                    isManualTheme = false;
                 }
             });
 
@@ -1874,7 +1938,7 @@
                 }, 300);
             });
 
-            lightThemeBtn.addEventListener('click', switchToLightTheme);
+            themeToggleBtn.addEventListener('click', toggleTheme);
 
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
