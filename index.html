@@ -4,23 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
     <title>🎉 Дни рождения</title>
-    
-    <!-- ===== УЛУЧШЕННОЕ ПРЕВЬЮ ДЛЯ МЕССЕНДЖЕРОВ ===== -->
-    <!-- Базовые мета-теги -->
+
+    <!-- ===== ОБНОВЛЁННОЕ ПРЕВЬЮ ДЛЯ МЕССЕНДЖЕРОВ ===== -->
     <meta property="og:title" content="🎉 Дни рождения участников чата «Клуб разбитых коленок»" />
     <meta property="og:description" id="ogDescription" content="Следующий день рождения: 28 октября — Настя и Кирилл 🎉" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://твой-ник.github.io/birthday-calendar/" />
+    <!-- ВАША ССЫЛКА -->
+    <meta property="og:url" content="https://viktorikik.github.io/Viktorikik/" />
     <meta property="og:image" content="https://emojicdn.elk.sh/🎉?size=512" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="🎉 Дни рождения участников чата «Клуб разбитых коленок»" />
     <meta name="twitter:description" id="twitterDescription" content="Следующий день рождения: 28 октября — Настя и Кирилл 🎉" />
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
-        /* ===== ВЕСЬ CSS (без изменений, тот же что был) ===== */
+        /* ===== ВЕСЬ CSS (без изменений) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -57,7 +57,7 @@
             margin-top: 10px;
         }
 
-        /* ===== ЗАГОЛОВОК ===== */
+        /* ===== ЗАГОЛОВОК (исправлен) ===== */
         .calendar-header {
             text-align: center;
             margin-bottom: 14px;
@@ -73,21 +73,25 @@
             line-height: 1.2;
         }
 
+        /* Убираем разноцветное выделение для слова "Дни рождения" */
         .calendar-header h1 span {
-            font-weight: 600;
-            background: linear-gradient(135deg, #d4875e, #e8a87c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-weight: 400;
+            background: none;
+            -webkit-text-fill-color: #3d2c1e;
+            color: #3d2c1e;
         }
 
         .subtitle {
             font-size: clamp(10px, 2.5vw, 13px);
             font-weight: 300;
             color: #b0957e;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            margin-top: 2px;
+            margin-top: 4px; /* Добавляем отступ сверху */
+        }
+
+        .subtitle span {
+            margin: 0 4px; /* Добавляем пробелы вокруг иконок */
         }
 
         /* ===== ФИЛЬТРЫ ===== */
@@ -652,6 +656,10 @@
             .calendar-header h1 {
                 color: #f0e4d8;
             }
+            .calendar-header h1 span {
+                -webkit-text-fill-color: #f0e4d8;
+                color: #f0e4d8;
+            }
             .current-month {
                 color: #f0e4d8;
             }
@@ -782,7 +790,8 @@
 <body>
     <div class="calendar-app" role="main">
         <div class="calendar-header">
-            <h1>✨ <span>Дни рождения</span> участников чата<br>«Клуб разбитых коленок»</h1>
+            <!-- ОБНОВЛЁННЫЙ ЗАГОЛОВОК: весь одним цветом -->
+            <h1>✨ Дни рождения участников чата<br>«Клуб разбитых коленок»</h1>
             <div class="subtitle">
                 <span>👩</span> мамы <span>·</span> <span>🎈</span> малыши
             </div>
@@ -842,10 +851,7 @@
                 const container = document.getElementById('confettiContainer');
                 const colors = ['#d4875e', '#e8a87c', '#f7d4ba', '#f5c4ba', '#6eb894', '#b8a898', '#f7e0cc', '#d4c4b4'];
                 const shapes = ['■', '●', '▲', '★', '✦', '♥'];
-                
-                // Очищаем старые конфетти
                 container.innerHTML = '';
-                
                 for (let i = 0; i < 80; i++) {
                     const piece = document.createElement('div');
                     piece.className = 'confetti-piece';
@@ -858,11 +864,7 @@
                     piece.style.transform = `rotate(${Math.random() * 360}deg)`;
                     container.appendChild(piece);
                 }
-                
-                // Убираем конфетти через 5 секунд
-                setTimeout(() => {
-                    container.innerHTML = '';
-                }, 5000);
+                setTimeout(() => { container.innerHTML = ''; }, 5000);
             }
 
             // ===== СКЛОНЕНИЯ =====
@@ -1087,10 +1089,9 @@
             function getNextBirthday() {
                 const today = new Date();
                 const todayDate = today.getDate();
-                const todayMonth = today.getMonth() + 1; // 1-12
+                const todayMonth = today.getMonth() + 1;
                 const todayYear = today.getFullYear();
 
-                // Собираем все дни рождения (мамы + малыши)
                 const allBirthdays = [];
 
                 Object.keys(momsMap).forEach(key => {
@@ -1105,13 +1106,11 @@
                     });
                 });
 
-                // Ищем ближайший день рождения
                 let next = null;
                 let minDiff = Infinity;
 
                 allBirthdays.forEach(b => {
                     let targetYear = todayYear;
-                    // Если день рождения уже прошёл в этом году — переносим на следующий
                     if (b.month < todayMonth || (b.month === todayMonth && b.day < todayDate)) {
                         targetYear++;
                     }
@@ -1123,7 +1122,6 @@
                     }
                 });
 
-                // Если не нашли (маловероятно) — берём первый попавшийся
                 if (!next && allBirthdays.length > 0) {
                     next = allBirthdays[0];
                 }
@@ -1131,18 +1129,20 @@
                 return next;
             }
 
-            // ===== ОБНОВЛЕНИЕ ПРЕВЬЮ =====
+            // ===== ОБНОВЛЕНИЕ ПРЕВЬЮ (ВАША ССЫЛКА) =====
             function updatePreview() {
                 const next = getNextBirthday();
                 if (next) {
                     const monthName = monthNamesNom[next.month - 1];
                     const description = `Следующий день рождения: ${next.day} ${monthName} — ${next.name} 🎉`;
-                    
-                    // Обновляем мета-теги
                     const ogDesc = document.getElementById('ogDescription');
                     const twitterDesc = document.getElementById('twitterDescription');
                     if (ogDesc) ogDesc.content = description;
                     if (twitterDesc) twitterDesc.content = description;
+
+                    // Обновляем превью через fetch с ВАШЕЙ ССЫЛКОЙ
+                    fetch('https://viktorikik.github.io/Viktorikik/')
+                        .catch(() => {});
                 }
             }
 
@@ -1183,7 +1183,7 @@
 
                     const peopleOnDay = getBirthdayPeople(day, currentMonth + 1, currentYear);
                     let hasMatching = false;
-                    
+
                     if (currentFilter === 'all') {
                         hasMatching = peopleOnDay.length > 0;
                     } else if (currentFilter === 'moms') {
@@ -1214,7 +1214,6 @@
                     grid.appendChild(el);
                 }
 
-                // Обновляем превью при смене месяца/года
                 updatePreview();
             }
 
@@ -1247,8 +1246,6 @@
                 modalNames.innerHTML = html;
                 modalOverlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                
-                // Запускаем конфетти
                 launchConfetti();
             }
 
