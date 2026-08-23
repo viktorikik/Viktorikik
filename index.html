@@ -43,7 +43,6 @@
             transition: padding 0.2s ease;
         }
 
-        /* ===== ЗАГОЛОВОК ===== */
         .calendar-header {
             text-align: center;
             margin-bottom: 18px;
@@ -79,7 +78,6 @@
             margin: 0 3px;
         }
 
-        /* ===== НАВИГАЦИЯ ===== */
         .month-selector {
             display: flex;
             align-items: center;
@@ -114,20 +112,15 @@
             background: rgba(255, 250, 245, 0.9);
         }
 
-        .nav-btn:hover {
-            background: rgba(255, 250, 245, 0.8);
-            color: #7a5a42;
-            border-color: rgba(200, 160, 130, 0.4);
-        }
-
-        @media (hover: none) {
+        @media (hover: hover) {
+            .nav-btn:hover {
+                background: rgba(255, 250, 245, 0.8);
+                color: #7a5a42;
+                border-color: rgba(200, 160, 130, 0.4);
+            }
             .nav-btn:hover {
                 transform: none;
                 background: rgba(255, 250, 245, 0.5);
-            }
-            .nav-btn:active {
-                transform: scale(0.88);
-                background: rgba(255, 250, 245, 0.9);
             }
         }
 
@@ -148,7 +141,6 @@
             font-size: clamp(15px, 3.5vw, 18px);
         }
 
-        /* ===== ДНИ НЕДЕЛИ ===== */
         .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -161,7 +153,6 @@
             text-transform: uppercase;
         }
 
-        /* ===== СЕТКА КАЛЕНДАРЯ ===== */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -189,14 +180,12 @@
             min-height: 0;
         }
 
-        /* Пустые ячейки */
         .day.empty {
             background: transparent;
             border: none;
             cursor: default;
         }
 
-        /* Обычный день — только на десктопе ховер */
         @media (hover: hover) {
             .day:not(.empty):not(.birthday):hover {
                 background: rgba(255, 250, 245, 0.6);
@@ -204,7 +193,6 @@
             }
         }
 
-        /* ===== ДЕНЬ С ИМЕНИННИКОМ ===== */
         .day.birthday {
             background: linear-gradient(135deg, #f7e0cc, #f5d4ba);
             color: #5a3f2e;
@@ -236,7 +224,6 @@
             opacity: 0.6;
         }
 
-        /* ===== СЕГОДНЯ ===== */
         .day.today {
             border-color: #d4875e;
             border-width: 2px;
@@ -245,7 +232,6 @@
             font-weight: 500;
         }
 
-        /* ===== СУММАРИЙ ===== */
         .summary {
             margin-top: 18px;
             background: rgba(255, 250, 245, 0.4);
@@ -422,7 +408,6 @@
             letter-spacing: 2px;
         }
 
-        /* ===== АДАПТИВ ДЛЯ ОЧЕНЬ МАЛЕНЬКИХ ЭКРАНОВ ===== */
         @media (max-width: 380px) {
             .calendar-app {
                 padding: 16px 12px 16px;
@@ -454,7 +439,6 @@
             }
         }
 
-        /* ===== АДАПТИВ ДЛЯ ПЛАНШЕТОВ И ДЕСКТОПА ===== */
         @media (min-width: 768px) {
             .calendar-app {
                 padding: 36px 32px 30px;
@@ -472,14 +456,12 @@
             }
         }
 
-        /* ===== ПОДДЕРЖКА SAFARI НА iPhone ===== */
         @supports (-webkit-touch-callout: none) {
             .calendar-app {
                 padding: 20px 16px 18px;
             }
         }
 
-        /* ===== DARK MODE ===== */
         @media (prefers-color-scheme: dark) {
             body {
                 background: #1a1410;
@@ -623,7 +605,6 @@
         </div>
     </div>
 
-    <!-- Модалка -->
     <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
         <div class="modal-card">
             <button class="modal-close" id="closeModalBtn" aria-label="Закрыть">✕</button>
@@ -636,7 +617,6 @@
 
     <script>
         (function(){
-            // ---- СКЛОНЕНИЕ СЛОВА "ИМЕННИНИК" ----
             function getBirthdayWord(count) {
                 const last = count % 10;
                 const lastTwo = count % 100;
@@ -775,20 +755,61 @@
                 return result;
             }
 
-            function getBirthdaysInMonth(month, year) {
-                const daysWithBirthdays = new Set();
+            // ===== НОВАЯ ФУНКЦИЯ: считаем ВСЕХ именинников в месяце (каждого человека) =====
+            function getBirthdayPeopleInMonth(month, year) {
+                const result = [];
 
                 Object.keys(momsMap).forEach(key => {
                     const [d, m] = key.split('.').map(Number);
-                    if (m === month + 1) daysWithBirthdays.add(d);
+                    if (m === month + 1) {
+                        momsMap[key].forEach(mom => {
+                            result.push({
+                                type: 'mom',
+                                day: d,
+                                name: mom.name,
+                                nameGen: mom.nameGen
+                            });
+                        });
+                    }
                 });
 
                 Object.keys(kidsMap).forEach(key => {
                     const [d, m] = key.split('.').map(Number);
-                    if (m === month + 1) daysWithBirthdays.add(d);
+                    if (m === month + 1) {
+                        kidsMap[key].forEach(kid => {
+                            const age = getAge(kid.birthYear, m, d, year, m, d);
+                            result.push({
+                                type: 'kid',
+                                day: d,
+                                mom: kid.mom,
+                                momGen: kid.momGen,
+                                baby: kid.baby,
+                                babyGen: kid.babyGen,
+                                age: age,
+                                gender: kid.gender || 'male'
+                            });
+                        });
+                    }
                 });
 
-                return Array.from(daysWithBirthdays).sort((a,b) => a - b);
+                return result.sort((a, b) => a.day - b.day);
+            }
+
+            // ===== НОВАЯ ФУНКЦИЯ: уникальные дни для подсветки календаря =====
+            function getUniqueBirthdayDays(month, year) {
+                const days = new Set();
+                
+                Object.keys(momsMap).forEach(key => {
+                    const [d, m] = key.split('.').map(Number);
+                    if (m === month + 1) days.add(d);
+                });
+
+                Object.keys(kidsMap).forEach(key => {
+                    const [d, m] = key.split('.').map(Number);
+                    if (m === month + 1) days.add(d);
+                });
+
+                return Array.from(days).sort((a, b) => a - b);
             }
 
             function render() {
@@ -798,8 +819,12 @@
                 let start = first.getDay();
                 start = start === 0 ? 6 : start - 1;
 
-                const bdays = getBirthdaysInMonth(currentMonth, currentYear);
-                const count = bdays.length;
+                // ===== СЧИТАЕМ ЛЮДЕЙ (каждого именинника отдельно) =====
+                const people = getBirthdayPeopleInMonth(currentMonth, currentYear);
+                const count = people.length;
+
+                // ===== УНИКАЛЬНЫЕ ДНИ для подсветки календаря =====
+                const uniqueDays = getUniqueBirthdayDays(currentMonth, currentYear);
 
                 monthLabel.innerHTML = `${monthNamesNom[currentMonth]} <span class="year">${currentYear}</span>`;
                 countEl.textContent = count;
@@ -825,6 +850,7 @@
                     el.textContent = day;
                     el.setAttribute('role', 'gridcell');
 
+                    // Проверяем, есть ли в этот день хоть один именинник
                     const key = `${String(day).padStart(2,'0')}.${String(currentMonth+1).padStart(2,'0')}`;
                     const hasMom = !!momsMap[key];
                     const hasKid = !!kidsMap[key];
@@ -833,11 +859,11 @@
                         el.classList.add('birthday');
                         el.addEventListener('click', function(e) {
                             e.stopPropagation();
-                            const people = getBirthdayPeople(day, currentMonth + 1, currentYear);
-                            if (people.length) openModal(day, people);
+                            const peopleOnDay = getBirthdayPeople(day, currentMonth + 1, currentYear);
+                            if (peopleOnDay.length) openModal(day, peopleOnDay);
                         });
                         el.addEventListener('touchstart', function(e) {
-                            // небольшая задержка, чтобы не конфликтовать с кликом
+                            // пассивный обработчик
                         }, { passive: true });
                     }
 
@@ -901,7 +927,7 @@
                 render();
             });
 
-            // Поддержка свайпов на мобильных
+            // Свайпы
             let touchStartX = 0;
             let touchStartY = 0;
             const app = document.querySelector('.calendar-app');
@@ -917,13 +943,10 @@
                 const deltaX = touchEndX - touchStartX;
                 const deltaY = touchEndY - touchStartY;
 
-                // Если свайп горизонтальный и достаточно длинный
                 if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
                     if (deltaX < 0) {
-                        // Свайп влево → следующий месяц
                         document.getElementById('nextMonth').click();
                     } else {
-                        // Свайп вправо → предыдущий месяц
                         document.getElementById('prevMonth').click();
                     }
                 }
