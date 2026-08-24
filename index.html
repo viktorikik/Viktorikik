@@ -208,8 +208,8 @@
         }
 
         body.light-theme .theme-notification {
-            background: rgba(255, 215, 0, 0.08) !important;
-            border-color: rgba(255, 215, 0, 0.15) !important;
+            background: rgba(255, 215, 0, 0.06) !important;
+            border-color: rgba(255, 215, 0, 0.1) !important;
             color: #b0957e !important;
         }
 
@@ -217,13 +217,16 @@
             color: #8a7a6a !important;
         }
 
-        body.light-theme .theme-notification .theme-message strong {
-            color: #d4875e !important;
+        body.light-theme .theme-notification .theme-btn {
+            background: rgba(255, 250, 245, 0.6) !important;
+            color: #3d2c1e !important;
+            border: 1px solid rgba(200, 160, 130, 0.2) !important;
         }
 
-        body.light-theme .theme-notification .theme-btn {
+        body.light-theme .theme-notification .theme-btn.default-btn {
             background: linear-gradient(135deg, #d4875e, #c47a54) !important;
             color: #fff !important;
+            border: none !important;
         }
 
         .calendar-app {
@@ -673,17 +676,17 @@
             font-weight: 400;
         }
 
-        /* ===== УВЕДОМЛЕНИЕ О ТЕМЕ (ВСЕГДА ВИДИМО) ===== */
+        /* ===== УВЕДОМЛЕНИЕ О ТЕМЕ (ДВЕ КНОПКИ) ===== */
         .theme-notification {
             margin-top: 10px;
-            background: rgba(255, 215, 0, 0.08);
+            background: rgba(255, 215, 0, 0.06);
             border-radius: 60px;
             padding: clamp(10px, 2.5vw, 14px) clamp(14px, 3vw, 20px);
             text-align: center;
             font-size: clamp(11px, 2.8vw, 13px);
             font-weight: 300;
             color: #b0957e;
-            border: 1px solid rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.1);
             letter-spacing: 0.2px;
             min-height: 44px;
             display: flex;
@@ -705,19 +708,18 @@
         }
 
         .theme-notification .theme-btn {
-            background: linear-gradient(135deg, #ffd700, #f0c800);
-            border: none;
+            background: rgba(255, 250, 245, 0.15);
+            border: 1px solid rgba(200, 160, 130, 0.15);
             border-radius: 40px;
             padding: 4px 16px;
             font-family: 'Inter', sans-serif;
             font-size: clamp(11px, 2.5vw, 13px);
-            color: #3d2c1e;
+            color: #e8a87c;
             cursor: pointer;
             transition: all 0.25s ease;
             font-weight: 500;
             touch-action: manipulation;
             white-space: nowrap;
-            box-shadow: 0 2px 12px rgba(255, 215, 0, 0.2);
         }
 
         .theme-notification .theme-btn:active {
@@ -726,9 +728,22 @@
 
         @media (hover: hover) {
             .theme-notification .theme-btn:hover {
-                background: linear-gradient(135deg, #f0c800, #e0b800);
-                box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+                background: rgba(255, 250, 245, 0.25);
                 transform: translateY(-1px);
+            }
+        }
+
+        .theme-notification .theme-btn.default-btn {
+            background: linear-gradient(135deg, #d4875e, #c47a54);
+            border: none;
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(212, 135, 94, 0.2);
+        }
+
+        @media (hover: hover) {
+            .theme-notification .theme-btn.default-btn:hover {
+                background: linear-gradient(135deg, #c47a54, #b06a48);
+                box-shadow: 0 4px 20px rgba(212, 135, 94, 0.3);
             }
         }
 
@@ -1005,6 +1020,7 @@
             .theme-notification {
                 font-size: 10px;
                 padding: 8px 12px;
+                gap: 6px;
             }
             .theme-notification .theme-btn {
                 font-size: 10px;
@@ -1125,16 +1141,21 @@
                 color: #e8a87c;
             }
             body:not(.light-theme) .theme-notification .theme-btn {
-                background: linear-gradient(135deg, #ffd700, #f0c800);
-                color: #3d2c1e;
+                background: rgba(255, 250, 245, 0.08);
+                border-color: rgba(200, 160, 130, 0.1);
+                color: #d4875e;
             }
-            body:not(.light-theme) .theme-notification .theme-btn.dark {
-                background: linear-gradient(135deg, #e8a87c, #d4875e) !important;
-                color: #f5ede8 !important;
+            body:not(.light-theme) .theme-notification .theme-btn.default-btn {
+                background: linear-gradient(135deg, #e8a87c, #d4875e);
+                color: #f5ede8;
+                border: none;
             }
             @media (hover: hover) {
-                body:not(.light-theme) .theme-notification .theme-btn.dark:hover {
-                    background: linear-gradient(135deg, #d4875e, #c47a54) !important;
+                body:not(.light-theme) .theme-notification .theme-btn.default-btn:hover {
+                    background: linear-gradient(135deg, #d4875e, #c47a54);
+                }
+                body:not(.light-theme) .theme-notification .theme-btn:not(.default-btn):hover {
+                    background: rgba(255, 250, 245, 0.15);
                 }
             }
             body:not(.light-theme) .stats {
@@ -1291,8 +1312,9 @@
         <div class="stats" id="stats"></div>
 
         <div class="theme-notification" id="themeNotification">
-            <span class="theme-message" id="themeMessage">☀️ Тема соответствует настройкам телефона (светлая)</span>
-            <button class="theme-btn" id="themeToggleBtn">🌙 Включить тёмную</button>
+            <span class="theme-message" id="themeMessage">🌙 Тема соответствует настройкам телефона</span>
+            <button class="theme-btn" id="themeToggleBtn">☀️ Включить светлую</button>
+            <button class="theme-btn default-btn" id="themeDefaultBtn">🔄 По умолчанию</button>
         </div>
     </div>
 
@@ -1417,122 +1439,105 @@
             const todayInfoEl = document.getElementById('todayInfo');
             const themeNotification = document.getElementById('themeNotification');
             const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeDefaultBtn = document.getElementById('themeDefaultBtn');
             const themeMessage = document.getElementById('themeMessage');
 
             let currentFilter = 'all';
-            let isDarkTheme = false;
-            let isManualTheme = false;
 
             // ===== ФУНКЦИЯ ОБНОВЛЕНИЯ УВЕДОМЛЕНИЯ =====
-            function updateThemeNotification() {
+            function updateThemeUI() {
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 const savedTheme = localStorage.getItem('calendarTheme');
+                const isLight = document.body.classList.contains('light-theme');
                 
-                // Определяем, совпадает ли текущая тема с системной
-                let isSystemTheme = false;
-                if (savedTheme === 'light' || savedTheme === 'dark') {
-                    // Если пользователь сохранил тему вручную
-                    isSystemTheme = false;
-                } else {
-                    // Если нет сохраненной темы, то тема определяется системой
-                    isSystemTheme = true;
+                let isDefault = false;
+                if (!savedTheme) {
+                    isDefault = true;
+                } else if ((savedTheme === 'light' && !prefersDark) || (savedTheme === 'dark' && prefersDark)) {
+                    isDefault = true;
                 }
                 
-                // Текущая активная тема (светлая или темная)
-                const isDark = document.body.classList.contains('light-theme') ? false : true;
-                
                 let message = '';
-                let buttonText = '';
-                let buttonClass = '';
+                let toggleText = '';
                 
-                if (isSystemTheme) {
-                    // Тема соответствует системной
-                    if (isDark) {
-                        message = '🌙 Тема соответствует настройкам телефона (тёмная)';
-                        buttonText = '☀️ Включить светлую';
-                        buttonClass = '';
-                    } else {
-                        message = '☀️ Тема соответствует настройкам телефона (светлая)';
-                        buttonText = '🌙 Включить тёмную';
-                        buttonClass = 'dark';
-                    }
+                if (isLight) {
+                    // Сейчас светлая тема
+                    message = '☀️ Тема соответствует настройкам телефона (светлая)';
+                    toggleText = '🌙 Включить тёмную';
                 } else {
-                    // Тема выбрана вручную (не совпадает с системной)
-                    if (isDark) {
-                        message = '🌙 Вы включили тёмную тему вручную';
-                        buttonText = '☀️ Вернуть светлую (по настройкам)';
-                        buttonClass = '';
-                    } else {
+                    // Сейчас тёмная тема
+                    message = '🌙 Тема соответствует настройкам телефона (тёмная)';
+                    toggleText = '☀️ Включить светлую';
+                }
+                
+                if (!isDefault) {
+                    if (isLight) {
                         message = '☀️ Вы включили светлую тему вручную';
-                        buttonText = '🌙 Вернуть тёмную (по настройкам)';
-                        buttonClass = 'dark';
+                    } else {
+                        message = '🌙 Вы включили тёмную тему вручную';
                     }
                 }
                 
                 themeMessage.textContent = message;
-                themeToggleBtn.textContent = buttonText;
-                if (buttonClass) {
-                    themeToggleBtn.classList.add('dark');
-                } else {
-                    themeToggleBtn.classList.remove('dark');
-                }
+                themeToggleBtn.textContent = toggleText;
             }
 
-            // ===== ПРОВЕРКА ТЕМЫ =====
-            function checkAndApplyTheme() {
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const savedTheme = localStorage.getItem('calendarTheme');
-                
-                if (savedTheme === 'light') {
+            // ===== ПРИМЕНЕНИЕ ТЕМЫ =====
+            function applyTheme(theme) {
+                if (theme === 'light') {
                     document.body.classList.add('light-theme');
-                    isDarkTheme = false;
-                    isManualTheme = true;
-                } else if (savedTheme === 'dark') {
+                } else if (theme === 'dark') {
                     document.body.classList.remove('light-theme');
-                    isDarkTheme = true;
-                    isManualTheme = true;
                 } else {
-                    // Нет сохраненной темы - используем системную
+                    // 'default' — по настройкам телефона
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     if (prefersDark) {
                         document.body.classList.remove('light-theme');
-                        isDarkTheme = true;
-                        isManualTheme = false;
                     } else {
                         document.body.classList.add('light-theme');
-                        isDarkTheme = false;
-                        isManualTheme = false;
                     }
                 }
-                
-                updateThemeNotification();
+                updateThemeUI();
             }
 
-            // ===== ПЕРЕКЛЮЧЕНИЕ ТЕМЫ =====
+            // ===== ПЕРЕКЛЮЧЕНИЕ ТЕМЫ (КНОПКА) =====
             function toggleTheme() {
-                const isDark = document.body.classList.contains('light-theme') ? false : true;
-                
-                if (isDark) {
-                    // Сейчас темная -> переключаем на светлую
-                    document.body.classList.add('light-theme');
-                    isDarkTheme = false;
-                    localStorage.setItem('calendarTheme', 'light');
-                } else {
-                    // Сейчас светлая -> переключаем на темную
-                    document.body.classList.remove('light-theme');
-                    isDarkTheme = true;
+                const isLight = document.body.classList.contains('light-theme');
+                if (isLight) {
+                    // Сейчас светлая → включаем тёмную
                     localStorage.setItem('calendarTheme', 'dark');
+                    applyTheme('dark');
+                } else {
+                    // Сейчас тёмная → включаем светлую
+                    localStorage.setItem('calendarTheme', 'light');
+                    applyTheme('light');
                 }
-                isManualTheme = true;
-                updateThemeNotification();
+            }
+
+            // ===== ВОЗВРАТ К СИСТЕМНОЙ ТЕМЕ =====
+            function setDefaultTheme() {
+                localStorage.removeItem('calendarTheme');
+                applyTheme('default');
             }
 
             // ===== СЛУШАЕМ ИЗМЕНЕНИЕ СИСТЕМНОЙ ТЕМЫ =====
             const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
             darkModeMediaQuery.addEventListener('change', () => {
-                // Если пользователь уже выбрал тему вручную, не меняем
-                if (localStorage.getItem('calendarTheme')) return;
-                checkAndApplyTheme();
+                // Если нет сохранённой темы — меняем автоматически
+                if (!localStorage.getItem('calendarTheme')) {
+                    applyTheme('default');
+                }
             });
+
+            // ===== ИНИЦИАЛИЗАЦИЯ =====
+            function initTheme() {
+                const savedTheme = localStorage.getItem('calendarTheme');
+                if (savedTheme === 'light' || savedTheme === 'dark') {
+                    applyTheme(savedTheme);
+                } else {
+                    applyTheme('default');
+                }
+            }
 
             // ===== ЗАПОЛНЯЕМ ВЫБОР ГОДА =====
             function populateYearSelect() {
@@ -1958,6 +1963,7 @@
             });
 
             themeToggleBtn.addEventListener('click', toggleTheme);
+            themeDefaultBtn.addEventListener('click', setDefaultTheme);
 
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -2003,7 +2009,7 @@
             }, { passive: true });
 
             // ===== ЗАПУСК =====
-            checkAndApplyTheme();
+            initTheme();
             render();
         })();
     </script>
