@@ -673,7 +673,7 @@
             font-weight: 400;
         }
 
-        /* ===== УВЕДОМЛЕНИЕ О ТЕМЕ ===== */
+        /* ===== УВЕДОМЛЕНИЕ О ТЕМЕ (ВСЕГДА ВИДИМО) ===== */
         .theme-notification {
             margin-top: 10px;
             background: rgba(255, 215, 0, 0.08);
@@ -1036,7 +1036,7 @@
             }
         }
 
-        /* ===== DARK MODE (ОСТАВЛЯЕМ ТОЛЬКО ДЛЯ СИСТЕМНОЙ ТЕМЫ) ===== */
+        /* ===== DARK MODE (СИСТЕМНАЯ ТЕМА) ===== */
         @media (prefers-color-scheme: dark) {
             body:not(.light-theme) {
                 background: #1a1410;
@@ -1290,9 +1290,9 @@
 
         <div class="stats" id="stats"></div>
 
-        <div class="theme-notification" id="themeNotification" style="display: none;">
-            <span class="theme-message" id="themeMessage">🌙 Включена темная тема в соответствии с настройками твоего телефона!</span>
-            <button class="theme-btn" id="themeToggleBtn">☀️ Вернуть светлую тему</button>
+        <div class="theme-notification" id="themeNotification">
+            <span class="theme-message" id="themeMessage">☀️ Тема соответствует настройкам телефона (светлая)</span>
+            <button class="theme-btn" id="themeToggleBtn">🌙 Включить тёмную</button>
         </div>
     </div>
 
@@ -1423,96 +1423,115 @@
             let isDarkTheme = false;
             let isManualTheme = false;
 
-            // ===== ПРОВЕРКА ТЕМНОЙ ТЕМЫ =====
-            function checkDarkTheme() {
+            // ===== ФУНКЦИЯ ОБНОВЛЕНИЯ УВЕДОМЛЕНИЯ =====
+            function updateThemeNotification() {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const savedTheme = localStorage.getItem('calendarTheme');
+                
+                // Определяем, совпадает ли текущая тема с системной
+                let isSystemTheme = false;
+                if (savedTheme === 'light' || savedTheme === 'dark') {
+                    // Если пользователь сохранил тему вручную
+                    isSystemTheme = false;
+                } else {
+                    // Если нет сохраненной темы, то тема определяется системой
+                    isSystemTheme = true;
+                }
+                
+                // Текущая активная тема (светлая или темная)
+                const isDark = document.body.classList.contains('light-theme') ? false : true;
+                
+                let message = '';
+                let buttonText = '';
+                let buttonClass = '';
+                
+                if (isSystemTheme) {
+                    // Тема соответствует системной
+                    if (isDark) {
+                        message = '🌙 Тема соответствует настройкам телефона (тёмная)';
+                        buttonText = '☀️ Включить светлую';
+                        buttonClass = '';
+                    } else {
+                        message = '☀️ Тема соответствует настройкам телефона (светлая)';
+                        buttonText = '🌙 Включить тёмную';
+                        buttonClass = 'dark';
+                    }
+                } else {
+                    // Тема выбрана вручную (не совпадает с системной)
+                    if (isDark) {
+                        message = '🌙 Вы включили тёмную тему вручную';
+                        buttonText = '☀️ Вернуть светлую (по настройкам)';
+                        buttonClass = '';
+                    } else {
+                        message = '☀️ Вы включили светлую тему вручную';
+                        buttonText = '🌙 Вернуть тёмную (по настройкам)';
+                        buttonClass = 'dark';
+                    }
+                }
+                
+                themeMessage.textContent = message;
+                themeToggleBtn.textContent = buttonText;
+                if (buttonClass) {
+                    themeToggleBtn.classList.add('dark');
+                } else {
+                    themeToggleBtn.classList.remove('dark');
+                }
+            }
+
+            // ===== ПРОВЕРКА ТЕМЫ =====
+            function checkAndApplyTheme() {
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 const savedTheme = localStorage.getItem('calendarTheme');
                 
                 if (savedTheme === 'light') {
                     document.body.classList.add('light-theme');
-                    themeNotification.style.display = 'flex';
-                    themeMessage.textContent = '☀️ Включена светлая тема';
-                    themeToggleBtn.textContent = '🌙 Вернуть темную тему';
-                    themeToggleBtn.classList.add('dark');
                     isDarkTheme = false;
                     isManualTheme = true;
-                    return;
-                }
-                
-                if (savedTheme === 'dark') {
+                } else if (savedTheme === 'dark') {
                     document.body.classList.remove('light-theme');
-                    themeNotification.style.display = 'flex';
-                    themeMessage.textContent = '🌙 Включена темная тема';
-                    themeToggleBtn.textContent = '☀️ Вернуть светлую тему';
-                    themeToggleBtn.classList.remove('dark');
                     isDarkTheme = true;
                     isManualTheme = true;
-                    return;
-                }
-                
-                if (prefersDark) {
-                    document.body.classList.remove('light-theme');
-                    themeNotification.style.display = 'flex';
-                    themeMessage.textContent = '🌙 Включена темная тема в соответствии с настройками твоего телефона!';
-                    themeToggleBtn.textContent = '☀️ Вернуть светлую тему';
-                    themeToggleBtn.classList.remove('dark');
-                    isDarkTheme = true;
-                    isManualTheme = false;
                 } else {
-                    document.body.classList.add('light-theme');
-                    themeNotification.style.display = 'none';
-                    isDarkTheme = false;
-                    isManualTheme = false;
+                    // Нет сохраненной темы - используем системную
+                    if (prefersDark) {
+                        document.body.classList.remove('light-theme');
+                        isDarkTheme = true;
+                        isManualTheme = false;
+                    } else {
+                        document.body.classList.add('light-theme');
+                        isDarkTheme = false;
+                        isManualTheme = false;
+                    }
                 }
+                
+                updateThemeNotification();
             }
 
             // ===== ПЕРЕКЛЮЧЕНИЕ ТЕМЫ =====
             function toggleTheme() {
-                if (isDarkTheme) {
-                    // Переключаем на светлую
+                const isDark = document.body.classList.contains('light-theme') ? false : true;
+                
+                if (isDark) {
+                    // Сейчас темная -> переключаем на светлую
                     document.body.classList.add('light-theme');
-                    themeMessage.textContent = '☀️ Включена светлая тема';
-                    themeToggleBtn.textContent = '🌙 Вернуть темную тему';
-                    themeToggleBtn.classList.add('dark');
                     isDarkTheme = false;
-                    isManualTheme = true;
                     localStorage.setItem('calendarTheme', 'light');
                 } else {
-                    // Переключаем на темную
+                    // Сейчас светлая -> переключаем на темную
                     document.body.classList.remove('light-theme');
-                    themeMessage.textContent = '🌙 Включена темная тема';
-                    themeToggleBtn.textContent = '☀️ Вернуть светлую тему';
-                    themeToggleBtn.classList.remove('dark');
                     isDarkTheme = true;
-                    isManualTheme = true;
                     localStorage.setItem('calendarTheme', 'dark');
                 }
+                isManualTheme = true;
+                updateThemeNotification();
             }
 
             // ===== СЛУШАЕМ ИЗМЕНЕНИЕ СИСТЕМНОЙ ТЕМЫ =====
             const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            darkModeMediaQuery.addEventListener('change', (e) => {
-                const savedTheme = localStorage.getItem('calendarTheme');
-                
-                if (savedTheme === 'light' || savedTheme === 'dark') {
-                    // Если пользователь уже выбрал тему вручную, не меняем
-                    return;
-                }
-                
-                if (e.matches) {
-                    document.body.classList.remove('light-theme');
-                    themeNotification.style.display = 'flex';
-                    themeMessage.textContent = '🌙 Включена темная тема в соответствии с настройками твоего телефона!';
-                    themeToggleBtn.textContent = '☀️ Вернуть светлую тему';
-                    themeToggleBtn.classList.remove('dark');
-                    isDarkTheme = true;
-                    isManualTheme = false;
-                } else {
-                    document.body.classList.add('light-theme');
-                    themeNotification.style.display = 'none';
-                    isDarkTheme = false;
-                    isManualTheme = false;
-                }
+            darkModeMediaQuery.addEventListener('change', () => {
+                // Если пользователь уже выбрал тему вручную, не меняем
+                if (localStorage.getItem('calendarTheme')) return;
+                checkAndApplyTheme();
             });
 
             // ===== ЗАПОЛНЯЕМ ВЫБОР ГОДА =====
@@ -1984,7 +2003,7 @@
             }, { passive: true });
 
             // ===== ЗАПУСК =====
-            checkDarkTheme();
+            checkAndApplyTheme();
             render();
         })();
     </script>
